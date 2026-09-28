@@ -80,13 +80,13 @@ screenshots.
 ## Support Sweeply
 
 Sweeply is free. If it saved you some space, you can buy the developer a coffee:
-see [.github/donate](.github/donate).
+see [docs/donate](docs/donate).
 
-<!-- Donation QR codes: uncomment once the images are in .github/donate/
+<!-- Donation QR codes: uncomment once the images are in docs/donate/
 <p>
-  <img src=".github/donate/wechat.png" width="180" alt="WeChat">
-  <img src=".github/donate/alipay.png" width="180" alt="Alipay">
-  <img src=".github/donate/paypay.png" width="180" alt="PayPay">
+  <img src="docs/donate/wechat.png" width="180" alt="WeChat">
+  <img src="docs/donate/alipay.png" width="180" alt="Alipay">
+  <img src="docs/donate/paypay.png" width="180" alt="PayPay">
 </p>
 -->
 
