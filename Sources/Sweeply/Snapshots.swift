@@ -15,11 +15,12 @@ enum Snapshots {
         try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         for language in AppLanguage.allCases where language != .system {
             let pages: [(String, ScanModel, ContentView.Tab)] = [
-                ("main", .sample, .clean), ("cleaned", .sampleAfterCleanup, .clean), ("disk", .sample, .disk),
+                ("main", .sample, .clean), ("cleaned", .sampleAfterCleanup, .clean), ("system", .sample, .system),
+                ("disk", .sample, .disk),
             ]
             for (name, model, tab) in pages {
             for dark in [false, true] {
-                let view = ContentView(model: model, disk: DiskHealthModel(state: .loaded(.sample)), tab: tab)
+                let view = ContentView(model: model, system: .sample, disk: DiskHealthModel(state: .loaded(.sample)), tab: tab)
                     .environment(\.locale, language.locale)
                     .frame(width: size.width, height: size.height)
                     // A borderless off-screen window doesn't paint its background.
@@ -47,6 +48,23 @@ enum Snapshots {
         guard let bitmap = hosting.bitmapImageRepForCachingDisplay(in: hosting.bounds) else { return nil }
         hosting.cacheDisplay(in: hosting.bounds, to: bitmap)
         return bitmap.representation(using: .png, properties: [:])
+    }
+}
+
+extension SystemModel {
+    /// Made-up readings for screenshots (no real machine's details).
+    static var sample: SystemModel {
+        let model = SystemModel(machine: SystemStats.Machine(
+            chip: "Apple M-series", performanceCores: 8, efficiencyCores: 4, logicalCores: 12,
+            bootDate: Date().addingTimeInterval(-(5 * 86400 + 3 * 3600))), live: false)
+        let gib: UInt64 = 1 << 30
+        model.showForSnapshot(
+            coreUsage: [0.12, 0.18, 0.09, 0.22, 0.64, 0.41, 0.35, 0.92, 0.28, 0.15, 0.51, 0.33],
+            memory: SystemStats.Memory(
+                total: 32 * gib, app: 11 * gib, wired: 3 * gib, compressed: 2 * gib,
+                cachedFiles: 9 * gib, swapUsed: 0, pressure: .normal),
+            storage: SystemStats.Storage(total: 494_000_000_000, available: 191_000_000_000))
+        return model
     }
 }
 

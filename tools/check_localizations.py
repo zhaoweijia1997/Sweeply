@@ -30,8 +30,9 @@ SWIFT_PATTERNS = [
     re.compile(r"\bLocalizedStringKey\(" + LITERAL),
     re.compile(r"\b(?:title|detail|note): " + LITERAL),
     re.compile(r"\(" + LITERAL + r", \.\w+\)"),  # ("Good", .green)
+    re.compile(r"\brow\(" + LITERAL),
 ]
-# Only in CleanCategory.swift: `case .developer: "Developer tools"` (group titles).
+# `case .developer: "Developer tools"`, `case .normal: "Normal"`.
 CATEGORY_PATTERN = re.compile(r"case \.\w+: " + LITERAL)
 # Strings that are deliberately not translated.
 NOT_LOCALIZED = {"Sweeply"}
@@ -56,7 +57,8 @@ def swift_keys():
     keys = set()
     for path in SOURCES.rglob("*.swift"):
         text = path.read_text(encoding="utf-8")
-        patterns = SWIFT_PATTERNS + ([CATEGORY_PATTERN] if path.name == "CleanCategory.swift" else [])
+        # `case .x: "…"` returns localized text everywhere except the language names.
+        patterns = SWIFT_PATTERNS + ([] if path.name == "AppLanguage.swift" else [CATEGORY_PATTERN])
         for pattern in patterns:
             for literal in pattern.findall(text):
                 # String interpolation becomes a placeholder (allows one level of nested parentheses).
@@ -83,6 +85,9 @@ def main():
 
     english_shapes = {PLACEHOLDER.sub("%", key) for key in english}
     for literal, file in sorted(swift_keys()):
+        # SF Symbol names such as "checkmark.square.fill" aren't text.
+        if re.fullmatch(r"[a-z0-9.]+", literal):
+            continue
         if literal and literal not in NOT_LOCALIZED and literal not in english_shapes:
             problems.append(f"{file}: no translation key for {literal!r}")
 
