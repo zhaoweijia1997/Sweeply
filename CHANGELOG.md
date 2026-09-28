@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.5.0 — unreleased
+## 0.5.0 — 2026-09-28
 
 - **Background mode with a menu bar icon** (Settings, off by default): closing the
   window keeps Sweeply running as a little broom in the menu bar, without a Dock icon,
