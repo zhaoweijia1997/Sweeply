@@ -114,3 +114,13 @@
 "Disk image" = "Disk image";
 "Other" = "Other";
 "Only names, sizes and speeds are shown. Sweeply never reads what's on external drives, and never shows serial numbers." = "Only names, sizes and speeds are shown. Sweeply never reads what's on external drives, and never shows serial numbers.";
+"Temperature & fans" = "Temperature & fans";
+"CPU, hottest core" = "CPU, hottest core";
+"CPU, average" = "CPU, average";
+"SSD" = "SSD";
+"Fan %lld" = "Fan %lld";
+"%lld rpm" = "%lld rpm";
+"This Mac has no fans." = "This Mac has no fans.";
+"Fan speed isn't available on this Mac." = "Fan speed isn't available on this Mac.";
+"Temperature sensors aren't available on this Mac." = "Temperature sensors aren't available on this Mac.";
+"Read from the Mac's own sensors. Which ones are available depends on the model." = "Read from the Mac's own sensors. Which ones are available depends on the model.";

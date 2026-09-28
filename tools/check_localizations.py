@@ -32,6 +32,7 @@ SWIFT_PATTERNS = [
     re.compile(r"\(" + LITERAL + r", \.\w+\)"),  # ("Good", .green)
     re.compile(r"\brow\(" + LITERAL),
     re.compile(r"\bsection\(" + LITERAL),
+    re.compile(r"\breading\(" + LITERAL),
     re.compile(r"\bbadge: .*?" + LITERAL),
     re.compile(r"String\(localized: " + LITERAL),
 ]

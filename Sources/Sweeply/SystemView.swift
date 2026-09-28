@@ -16,7 +16,11 @@ struct SystemView: View {
                     memoryCard
                 }
                 .fixedSize(horizontal: false, vertical: true)
-                storageCard
+                HStack(alignment: .top, spacing: 14) {
+                    storageCard
+                    sensorsCard
+                }
+                .fixedSize(horizontal: false, vertical: true)
             }
             .padding(20)
         }
@@ -115,14 +119,12 @@ struct SystemView: View {
         SystemCard(title: "Startup disk") {
             if let storage = model.storage {
                 let used = storage.total - storage.available
-                HStack(alignment: .firstTextBaseline) {
-                    Text("Available: \(formatBytes(storage.available))")
-                        .font(.title3.weight(.semibold))
-                    Spacer()
-                    Text("Used \(formatBytes(used)) of \(formatBytes(storage.total))")
-                        .foregroundStyle(.secondary)
-                }
-                .monospacedDigit()
+                Text("Available: \(formatBytes(storage.available))")
+                    .font(.title3.weight(.semibold))
+                    .monospacedDigit()
+                Text("Used \(formatBytes(used)) of \(formatBytes(storage.total))")
+                    .foregroundStyle(.secondary)
+                    .monospacedDigit()
                 ProgressView(value: Double(used), total: Double(max(storage.total, 1)))
                     .tint(Double(storage.available) / Double(max(storage.total, 1)) < 0.1 ? .orange : .accentColor)
                 Text("Available space includes files macOS can remove on its own when it needs room.")
@@ -130,6 +132,67 @@ struct SystemView: View {
                     .foregroundStyle(.secondary)
             }
         }
+    }
+
+    private var sensorsCard: some View {
+        SystemCard(title: "Temperature & fans") {
+            if let sensors = model.sensors {
+                VStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        if sensors.hasTemperatures {
+                            if let hottest = sensors.cpuHottest {
+                                reading("CPU, hottest core", Text(verbatim: celsius(hottest)), warning: hottest >= 90)
+                            }
+                            if let average = sensors.cpuAverage {
+                                reading("CPU, average", Text(verbatim: celsius(average)))
+                            }
+                            if let ssd = sensors.ssd {
+                                reading("SSD", Text(verbatim: celsius(ssd)), warning: ssd >= 70)
+                            }
+                        } else {
+                            Text("Temperature sensors aren't available on this Mac.").foregroundStyle(.secondary)
+                        }
+                    }
+                    Divider()
+                    VStack(alignment: .leading, spacing: 6) {
+                        switch sensors.fans {
+                        case nil:
+                            Text("Fan speed isn't available on this Mac.").foregroundStyle(.secondary)
+                        case let fans? where fans.isEmpty:
+                            Text("This Mac has no fans.").foregroundStyle(.secondary)
+                        case let fans?:
+                            ForEach(Array(fans.enumerated()), id: \.offset) { index, fan in
+                                reading("Fan \(index + 1)", Text("\(Int(fan.rpm)) rpm"))
+                                if let minimum = fan.minimum, let maximum = fan.maximum, maximum > minimum {
+                                    ProgressView(value: min(max(fan.rpm - minimum, 0), maximum - minimum), total: maximum - minimum)
+                                }
+                            }
+                        }
+                    }
+                }
+                Text("Read from the Mac's own sensors. Which ones are available depends on the model.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } else {
+                Text(verbatim: "…")
+            }
+        }
+    }
+
+    private func reading(_ title: LocalizedStringKey, _ value: Text, warning: Bool = false) -> some View {
+        HStack {
+            Text(title)
+            Spacer()
+            value
+                .fontWeight(.medium)
+                .monospacedDigit()
+                .foregroundStyle(warning ? .orange : .primary)
+        }
+    }
+
+    private func celsius(_ value: Double) -> String {
+        Measurement(value: value.rounded(), unit: UnitTemperature.celsius)
+            .formatted(.measurement(width: .abbreviated, usage: .asProvided, numberFormatStyle: .number.precision(.fractionLength(0))).locale(locale))
     }
 
     private func row(_ title: LocalizedStringKey, _ value: UInt64) -> some View {

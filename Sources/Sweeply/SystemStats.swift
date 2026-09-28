@@ -150,7 +150,9 @@ final class SystemModel {
     private(set) var coreUsage: [Double] = []
     private(set) var memory: SystemStats.Memory?
     private(set) var storage: SystemStats.Storage?
+    private(set) var sensors: SensorReadings?
     let machine: SystemStats.Machine
+    private var readingSensors = false
 
     private var lastTicks: SystemStats.CPUTicks?
     private var timer: Timer?
@@ -186,12 +188,21 @@ final class SystemModel {
         }
         memory = SystemStats.memory()
         storage = SystemStats.storage()
+        // Sensors take ~70 ms, so they're read off the main thread (tested safe, also concurrently).
+        guard !readingSensors else { return }
+        readingSensors = true
+        Task {
+            let readings = await Task.detached(priority: .utility) { Sensors.read() }.value
+            sensors = readings
+            readingSensors = false
+        }
     }
 
     /// Only for `--snapshot` renders.
-    func showForSnapshot(coreUsage: [Double], memory: SystemStats.Memory, storage: SystemStats.Storage) {
+    func showForSnapshot(coreUsage: [Double], memory: SystemStats.Memory, storage: SystemStats.Storage, sensors: SensorReadings) {
         self.coreUsage = coreUsage
         self.memory = memory
         self.storage = storage
+        self.sensors = sensors
     }
 }

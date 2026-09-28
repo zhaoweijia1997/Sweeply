@@ -82,7 +82,10 @@ extension SystemModel {
             memory: SystemStats.Memory(
                 total: 32 * gib, app: 11 * gib, wired: 3 * gib, compressed: 2 * gib,
                 cachedFiles: 9 * gib, swapUsed: 0, pressure: .normal),
-            storage: SystemStats.Storage(total: 494_000_000_000, available: 191_000_000_000))
+            storage: SystemStats.Storage(total: 494_000_000_000, available: 191_000_000_000),
+            sensors: SensorReadings(
+                cpuHottest: 48.5, cpuAverage: 44.2, ssd: 35,
+                fans: [SensorReadings.Fan(rpm: 1350, minimum: 1000, maximum: 3500)]))
         return model
     }
 }

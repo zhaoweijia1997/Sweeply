@@ -111,3 +111,13 @@
 "Disk image" = "磁盘镜像";
 "Other" = "其他";
 "Only names, sizes and speeds are shown. Sweeply never reads what's on external drives, and never shows serial numbers." = "这里只显示名称、容量和速度。Sweeply 从不读取外接硬盘里的内容，也不显示任何序列号。";
+"Temperature & fans" = "温度和风扇";
+"CPU, hottest core" = "CPU 最热的核心";
+"CPU, average" = "CPU 平均";
+"SSD" = "固态硬盘";
+"Fan %lld" = "风扇 %lld";
+"%lld rpm" = "%lld 转/分";
+"This Mac has no fans." = "这台 Mac 没有风扇。";
+"Fan speed isn't available on this Mac." = "这台 Mac 读不到风扇转速。";
+"Temperature sensors aren't available on this Mac." = "这台 Mac 读不到温度传感器。";
+"Read from the Mac's own sensors. Which ones are available depends on the model." = "数据来自 Mac 自带的传感器，能读到哪些取决于机型。";

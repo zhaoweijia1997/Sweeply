@@ -111,3 +111,13 @@
 "Disk image" = "ディスクイメージ";
 "Other" = "その他";
 "Only names, sizes and speeds are shown. Sweeply never reads what's on external drives, and never shows serial numbers." = "名前、容量、速度のみを表示します。Sweeplyが外部ドライブの中身を読むことはなく、シリアル番号も表示しません。";
+"Temperature & fans" = "温度とファン";
+"CPU, hottest core" = "CPU（最も熱いコア）";
+"CPU, average" = "CPU（平均）";
+"SSD" = "SSD";
+"Fan %lld" = "ファン %lld";
+"%lld rpm" = "%lld rpm";
+"This Mac has no fans." = "このMacにはファンがありません。";
+"Fan speed isn't available on this Mac." = "このMacではファンの回転数を読み取れません。";
+"Temperature sensors aren't available on this Mac." = "このMacでは温度センサーを読み取れません。";
+"Read from the Mac's own sensors. Which ones are available depends on the model." = "Mac内蔵のセンサーから読み取っています。読み取れる項目は機種によって異なります。";

@@ -111,3 +111,13 @@
 "Disk image" = "Imagen de disco";
 "Other" = "Otro";
 "Only names, sizes and speeds are shown. Sweeply never reads what's on external drives, and never shows serial numbers." = "Solo se muestran nombres, tamaños y velocidades. Sweeply nunca lee el contenido de los discos externos ni muestra números de serie.";
+"Temperature & fans" = "Temperatura y ventiladores";
+"CPU, hottest core" = "CPU, núcleo más caliente";
+"CPU, average" = "CPU, promedio";
+"SSD" = "SSD";
+"Fan %lld" = "Ventilador %lld";
+"%lld rpm" = "%lld rpm";
+"This Mac has no fans." = "Este Mac no tiene ventiladores.";
+"Fan speed isn't available on this Mac." = "La velocidad de los ventiladores no está disponible en este Mac.";
+"Temperature sensors aren't available on this Mac." = "Los sensores de temperatura no están disponibles en este Mac.";
+"Read from the Mac's own sensors. Which ones are available depends on the model." = "Datos de los propios sensores del Mac. Los que están disponibles dependen del modelo.";
