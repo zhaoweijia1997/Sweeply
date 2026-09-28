@@ -15,3 +15,6 @@ labels: bug
 - macOS version:
 - Apple silicon or Intel:
 - Sweeply version (About Sweeply):
+
+**If it's about Disk Health**, paste the output of this Terminal command:
+`/Applications/Sweeply.app/Contents/MacOS/Sweeply --disk-health`

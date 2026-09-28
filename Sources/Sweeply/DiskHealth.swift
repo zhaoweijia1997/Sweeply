@@ -64,6 +64,10 @@ extension DiskHealth {
 
     /// Reads the built-in NVMe SSD. Returns nil when there is none that reports SMART data
     /// (for example older Macs with a SATA SSD).
+    ///
+    /// Main thread only: Apple's SMART plug-in fails when created on a background thread.
+    /// A read takes a few milliseconds.
+    @MainActor
     static func readBuiltInDisk() -> DiskHealth? {
         var iterator: io_iterator_t = 0
         guard IOServiceGetMatchingServices(kIOMainPortDefault, IOServiceMatching("IONVMeBlockStorageDevice"), &iterator) == KERN_SUCCESS else {
@@ -143,11 +147,7 @@ final class DiskHealthModel {
     }
 
     func refresh() {
-        if case .loading = state { return }
-        state = .loading
-        Task {
-            let health = await Task.detached(priority: .userInitiated) { DiskHealth.readBuiltInDisk() }.value
-            state = health.map(State.loaded) ?? .unavailable
-        }
+        // Runs on the main actor on purpose; see readBuiltInDisk().
+        state = DiskHealth.readBuiltInDisk().map(State.loaded) ?? .unavailable
     }
 }

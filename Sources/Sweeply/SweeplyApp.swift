@@ -20,6 +20,16 @@ struct SweeplyApp: App {
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
+        // Sweeply.app/Contents/MacOS/Sweeply --disk-health: print what Disk Health reads, for bug reports.
+        if CommandLine.arguments.contains("--disk-health") {
+            // Same path as the Disk Health tab.
+            MainActor.assumeIsolated {
+                let model = DiskHealthModel()
+                model.refresh()
+                if case let .loaded(health) = model.state { print(health) } else { print("Disk health unavailable") }
+            }
+            exit(0)
+        }
         // Sweeply.app/Contents/MacOS/Sweeply --snapshot <folder>
         if let flag = CommandLine.arguments.firstIndex(of: "--snapshot") {
             let folder = CommandLine.arguments.dropFirst(flag + 1).first ?? "."

@@ -11,7 +11,7 @@
   <img src="docs/screenshots/main-zh-Hans-light.png" width="720" alt="Sweeply 显示开发工具缓存及大小">
 </p>
 
-> **状态：早期预览版（0.2）。** 扫描，并把你选中的项目移到废纸篓。
+> **状态：早期预览版（0.3）。** 扫描、把选中的项目移到废纸篓，还能查看固态硬盘的健康状况。
 
 ## 能找到什么
 
@@ -28,6 +28,10 @@
 
 **硬盘健康**（0.3 新增）
 - 这台 Mac 内置固态硬盘累计写入了多少、硬盘自己估算的磨损程度、温度、备用块和错误次数，直接从硬盘读取。
+
+<p align="center">
+  <img src="docs/screenshots/disk-zh-Hans-light.png" width="620" alt="Sweeply 的硬盘健康页">
+</p>
 
 每一类都会说明是什么、删了会不会自动重建。展开能看到每个文件夹，可以在访达中显示，也可以单独取消勾选想保留的。
 
@@ -67,6 +71,7 @@ English、简体中文、繁體中文、日本語、Русский、Español、
 python3 tools/check_localizations.py   # 检查所有翻译
 ```
 
+`Sweeply.app/Contents/MacOS/Sweeply --disk-health` 会打印硬盘健康页读到的数据（提交问题时有用）。
 `Sweeply.app/Contents/MacOS/Sweeply --snapshot <文件夹>` 会用虚构的扫描结果，把窗口在每种语言、
 浅色和深色下各画一张图，方便检查排版和做截图。
 

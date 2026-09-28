@@ -12,7 +12,7 @@ anything until you choose to.
   <img src="docs/screenshots/main-en-light.png" width="720" alt="Sweeply showing developer caches and their sizes">
 </p>
 
-> **Status: early preview (0.2).** Scans, and moves what you pick to the Trash.
+> **Status: early preview (0.3).** Scans, moves what you pick to the Trash, and shows your SSD's health.
 
 ## What it finds
 
@@ -30,6 +30,10 @@ anything until you choose to.
 **Disk Health** (new in 0.3)
 - How much has been written to your Mac's built-in SSD, how worn the drive thinks it
   is, its temperature, spare blocks and error counts — read straight from the drive.
+
+<p align="center">
+  <img src="docs/screenshots/disk-en-light.png" width="620" alt="Sweeply's Disk Health tab">
+</p>
 
 Each category explains what it is and whether it comes back. Expand it to see every
 folder, reveal it in Finder, or untick the ones you want to keep.
@@ -73,7 +77,8 @@ Requires Xcode (the Command Line Tools alone lack SwiftUI's macro plugins).
 python3 tools/check_localizations.py   # checks every translation
 ```
 
-`Sweeply.app/Contents/MacOS/Sweeply --snapshot <folder>` renders the window in every
+`Sweeply.app/Contents/MacOS/Sweeply --disk-health` prints what the Disk Health tab reads
+(handy for bug reports). `Sweeply.app/Contents/MacOS/Sweeply --snapshot <folder>` renders the window in every
 language, light and dark, using made-up results — handy for checking layouts and for
 screenshots.
 
