@@ -95,8 +95,9 @@ Requires Xcode (the Command Line Tools alone lack SwiftUI's macro plugins).
 python3 tools/check_localizations.py   # checks every translation
 ```
 
-`Sweeply.app/Contents/MacOS/Sweeply --disk-health` prints what the Disk Health tab reads
-(handy for bug reports). `Sweeply.app/Contents/MacOS/Sweeply --snapshot <folder>` renders the window in every
+`Sweeply.app/Contents/MacOS/Sweeply --report` prints every reading (system, sensors,
+devices, disk health) twice, without any serial numbers — handy for bug reports.
+`--disk-health` prints just the disk health reading. `Sweeply.app/Contents/MacOS/Sweeply --snapshot <folder>` renders the window in every
 language, light and dark, using made-up results — handy for checking layouts and for
 screenshots.
 

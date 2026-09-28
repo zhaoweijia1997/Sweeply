@@ -44,6 +44,30 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             }
             exit(0)
         }
+        // Sweeply.app/Contents/MacOS/Sweeply --report: every reading, twice, for bug reports.
+        // Contains no serial numbers or other identifiers.
+        if CommandLine.arguments.contains("--report") {
+            MainActor.assumeIsolated {
+                for attempt in 1...2 {
+                    let machine = SystemStats.machine()
+                    let memory = SystemStats.memory()
+                    let storage = SystemStats.storage()
+                    let sensors = Sensors.read()
+                    let devices = PeripheralScanner.scan()
+                    let disk = DiskHealth.readBuiltInDisk()
+                    print("""
+                    Read \(attempt)
+                      Machine: \(machine.chip), \(machine.performanceCores)P + \(machine.efficiencyCores)E cores
+                      Memory: used \(memory.map { String($0.used) } ?? "?") of \(memory.map { String($0.total) } ?? "?") bytes, pressure \(memory.map { "\($0.pressure)" } ?? "?")
+                      Storage: \(storage.map { "\($0.available) of \($0.total) bytes free" } ?? "?")
+                      Sensors: CPU hottest \(sensors.cpuHottest.map { String(format: "%.1f", $0) } ?? "–"), average \(sensors.cpuAverage.map { String(format: "%.1f", $0) } ?? "–"), SSD \(sensors.ssd.map { String(format: "%.1f", $0) } ?? "–"), fans \(sensors.fans.map { $0.map { String(Int($0.rpm)) }.joined(separator: "/") } ?? "unavailable")
+                      Devices: \(devices.displays.count) displays, \(devices.drives.count) external drives, \(devices.usb.count) USB, \(devices.thunderbolt.count) Thunderbolt
+                      Disk health: \(disk.map { "\(Int($0.bytesWritten / 1e9)) GB written, \($0.percentageUsed)% used" } ?? "unavailable")
+                    """)
+                }
+            }
+            exit(0)
+        }
         // Sweeply.app/Contents/MacOS/Sweeply --snapshot <folder>
         if let flag = CommandLine.arguments.firstIndex(of: "--snapshot") {
             let folder = CommandLine.arguments.dropFirst(flag + 1).first ?? "."

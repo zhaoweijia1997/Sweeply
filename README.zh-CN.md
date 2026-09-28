@@ -87,7 +87,8 @@ English、简体中文、繁體中文、日本語、Русский、Español、
 python3 tools/check_localizations.py   # 检查所有翻译
 ```
 
-`Sweeply.app/Contents/MacOS/Sweeply --disk-health` 会打印硬盘健康页读到的数据（提交问题时有用）。
+`Sweeply.app/Contents/MacOS/Sweeply --report` 会把所有读数（系统、传感器、外设、硬盘健康）打印两遍，不含任何序列号，提交问题时附上它很有用。
+`--disk-health` 只打印硬盘健康的读数。
 `Sweeply.app/Contents/MacOS/Sweeply --snapshot <文件夹>` 会用虚构的扫描结果，把窗口在每种语言、
 浅色和深色下各画一张图，方便检查排版和做截图。
 

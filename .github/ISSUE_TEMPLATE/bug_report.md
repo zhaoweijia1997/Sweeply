@@ -16,5 +16,6 @@ labels: bug
 - Apple silicon or Intel:
 - Sweeply version (About Sweeply):
 
-**If it's about Disk Health**, paste the output of this Terminal command:
-`/Applications/Sweeply.app/Contents/MacOS/Sweeply --disk-health`
+**If it's about the System, Disk Health or Devices tab**, paste the output of this
+Terminal command (it contains no serial numbers):
+`/Applications/Sweeply.app/Contents/MacOS/Sweeply --report`
