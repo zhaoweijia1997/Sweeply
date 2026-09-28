@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.0 — unreleased
+## 0.2.0 — 2026-09-28
 
 - **Move to Trash.** Tick categories — or single folders inside them — and move them to
   the Trash after a confirmation. Nothing is ever deleted outright.
@@ -10,7 +10,7 @@
 - A summary after cleaning, with a reminder to empty the Trash and a button to open it.
 - App icon (drawn by `tools/make-icon.swift`).
 
-## 0.1.0 — unreleased
+## 0.1.0 — preview, not released as a download
 
 First preview: scan only.
 
