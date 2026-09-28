@@ -5,9 +5,7 @@ struct AboutView: View {
 
     var body: some View {
         VStack(spacing: 14) {
-            Image(systemName: "sparkles")
-                .font(.system(size: 44))
-                .foregroundStyle(.tint)
+            AppIconImage(size: 88)
             Text(verbatim: "Sweeply")
                 .font(.title.weight(.semibold))
             Text("Version \(AppLinks.version)")

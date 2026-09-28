@@ -39,9 +39,7 @@ struct ContentView: View {
 
     private var header: some View {
         HStack(spacing: 14) {
-            Image(systemName: "sparkles")
-                .font(.system(size: 30))
-                .foregroundStyle(.tint)
+            AppIconImage(size: 52)
             VStack(alignment: .leading, spacing: 3) {
                 Text(verbatim: "Sweeply")
                     .font(.title2.weight(.semibold))
@@ -354,6 +352,18 @@ private struct EmptyState: View {
         }
         .multilineTextAlignment(.center)
         .padding(40)
+    }
+}
+
+/// The app's own icon (Resources/AppIcon.icns, drawn by tools/make-icon.swift).
+struct AppIconImage: View {
+    let size: CGFloat
+
+    var body: some View {
+        Image(nsImage: NSApp?.applicationIconImage ?? NSImage())
+            .resizable()
+            .frame(width: size, height: size)
+            .accessibilityHidden(true)
     }
 }
 

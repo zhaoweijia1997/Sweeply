@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/icon.png" width="128" alt="Sweeply 图标"></p>
+
 # Sweeply
 
 [English](README.md) · **简体中文**
@@ -70,7 +72,7 @@ python3 tools/check_localizations.py   # 检查所有翻译
 - [x] 把选中的项目移到废纸篓（0.2）
 - [ ] 删除已不再安装的 iOS 版本对应的模拟器
 - [ ] 下载文件夹里的旧安装包
-- [ ] App 图标
+- [x] App 图标
 
 ## 支持 Sweeply
 

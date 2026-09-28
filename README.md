@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/icon.png" width="128" alt="Sweeply icon"></p>
+
 # Sweeply
 
 **English** · [简体中文](README.zh-CN.md)
@@ -76,7 +78,7 @@ screenshots.
 - [x] Move selected items to the Trash (0.2)
 - [ ] Remove simulators for iOS versions you no longer have installed
 - [ ] Old installers in Downloads
-- [ ] App icon
+- [x] App icon
 
 ## Support Sweeply
 

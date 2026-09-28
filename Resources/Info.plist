@@ -8,6 +8,8 @@
 	<string>Sweeply</string>
 	<key>CFBundleExecutable</key>
 	<string>Sweeply</string>
+	<key>CFBundleIconFile</key>
+	<string>AppIcon</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.weijiazhao.sweeply</string>
 	<key>CFBundleLocalizations</key>
