@@ -73,15 +73,13 @@ python3 tools/check_localizations.py   # 检查所有翻译
 
 ## 支持 Sweeply
 
-Sweeply 是免费的。如果它帮你腾出了空间，可以请开发者喝杯咖啡，见 [docs/donate](docs/donate)。
+Sweeply 永久免费。如果它帮你腾出了空间，可以请开发者喝杯咖啡：国内用微信或支付宝，海外用 PayPal。谢谢！
 
-<!-- 收款码：图片放进 docs/donate/ 之后取消注释
-<p>
-  <img src="docs/donate/wechat.png" width="180" alt="微信">
-  <img src="docs/donate/alipay.png" width="180" alt="支付宝">
-  <img src="docs/donate/paypay.png" width="180" alt="PayPay">
+<p align="center">
+  <img src="docs/donate/wechat.png" height="260" alt="微信支付收款码">
+  <img src="docs/donate/alipay.png" height="260" alt="支付宝收款码">
+  <img src="docs/donate/paypal.png" height="260" alt="PayPal 收款码">
 </p>
--->
 
 ## 联系
 

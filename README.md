@@ -79,16 +79,14 @@ screenshots.
 
 ## Support Sweeply
 
-Sweeply is free. If it saved you some space, you can buy the developer a coffee:
-see [docs/donate](docs/donate).
+Sweeply is free and always will be. If it saved you some space, you can buy the
+developer a coffee — WeChat Pay or Alipay in China, PayPal anywhere. Thank you!
 
-<!-- Donation QR codes: uncomment once the images are in docs/donate/
-<p>
-  <img src="docs/donate/wechat.png" width="180" alt="WeChat">
-  <img src="docs/donate/alipay.png" width="180" alt="Alipay">
-  <img src="docs/donate/paypay.png" width="180" alt="PayPay">
+<p align="center">
+  <img src="docs/donate/wechat.png" height="260" alt="WeChat Pay QR code">
+  <img src="docs/donate/alipay.png" height="260" alt="Alipay QR code">
+  <img src="docs/donate/paypal.png" height="260" alt="PayPal QR code">
 </p>
--->
 
 ## Contact
 
