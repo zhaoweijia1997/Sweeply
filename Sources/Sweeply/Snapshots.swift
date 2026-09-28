@@ -13,6 +13,7 @@ enum Snapshots {
 
     static func render(to folder: URL) {
         try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        renderMenuBarIcon(to: folder)
         for language in AppLanguage.allCases where language != .system {
             let pages: [(String, ScanModel, ContentView.Tab)] = [
                 ("main", .sample, .clean), ("cleaned", .sampleAfterCleanup, .clean), ("system", .sample, .system),
@@ -36,14 +37,56 @@ enum Snapshots {
                 }
             }
             }
+
+            // Settings and the menu bar panel, sized to fit. The settings shown come from the
+            // argument domain: in memory for this run only, so real preferences aren't touched.
+            var arguments = UserDefaults.standard.volatileDomain(forName: UserDefaults.argumentDomain)
+            arguments[AppSettings.backgroundModeKey] = true
+            arguments[AppSettings.menuBarShowsKey] = MenuBarShows.temperature.rawValue
+            UserDefaults.standard.setVolatileDomain(arguments, forName: UserDefaults.argumentDomain)
+            for dark in [false, true] {
+                let suffix = "\(language.rawValue)-\(dark ? "dark" : "light").png"
+                let settings = SettingsView()
+                    .environment(\.locale, language.locale)
+                    .background(Color(nsColor: .windowBackgroundColor))
+                if let png = draw(settings, dark: dark, height: nil) {
+                    try? png.write(to: folder.appending(path: "settings-" + suffix))
+                }
+                let panel = MenuBarPanel(
+                    system: .sample, disk: DiskHealthModel(state: .loaded(.sample), history: .sample, live: false))
+                    .environment(\.locale, language.locale)
+                    .background(Color(nsColor: .windowBackgroundColor))
+                if let png = draw(panel, dark: dark, height: nil) {
+                    try? png.write(to: folder.appending(path: "menubar-" + suffix))
+                }
+            }
         }
     }
 
     /// Draws the view in an off-screen window, so AppKit-backed controls
     /// (buttons, menus, scroll views) render too. Needs no screen-recording permission.
-    private static func draw(_ view: some View, dark: Bool, height: CGFloat) -> Data? {
+    /// The menu bar icon, enlarged, on light and dark bars (for checking the drawing).
+    static func renderMenuBarIcon(to folder: URL) {
+        let icon = HStack(spacing: 24) {
+            ForEach([false, true], id: \.self) { dark in
+                Image(nsImage: MenuBarIcon.image)
+                    .resizable()
+                    .renderingMode(.template)
+                    .frame(width: 72, height: 72)
+                    .foregroundStyle(dark ? .white : .black)
+                    .padding(12)
+                    .background(dark ? Color.black : Color(white: 0.92))
+            }
+        }
+        if let png = draw(icon, dark: false, height: nil) {
+            try? png.write(to: folder.appending(path: "menubar-icon.png"))
+        }
+    }
+
+    /// With `height` nil, the view is drawn at its natural size.
+    private static func draw(_ view: some View, dark: Bool, height: CGFloat?) -> Data? {
         let hosting = NSHostingView(rootView: view)
-        hosting.frame = NSRect(origin: .zero, size: NSSize(width: size.width, height: height))
+        hosting.frame = NSRect(origin: .zero, size: height.map { NSSize(width: size.width, height: $0) } ?? hosting.fittingSize)
         let window = NSWindow(contentRect: hosting.frame, styleMask: [.borderless], backing: .buffered, defer: false)
         window.appearance = NSAppearance(named: dark ? .darkAqua : .aqua)
         window.contentView = hosting

@@ -12,7 +12,7 @@ anything until you choose to.
   <img src="docs/screenshots/main-en-light.png" width="720" alt="Sweeply showing developer caches and their sizes">
 </p>
 
-> **Status: early preview (0.4).** Cleans up, and gives your Mac a quick checkup: system, SSD health and connected devices.
+> **Status: early preview (0.5).** Cleans up, gives your Mac a quick checkup, and can stay in the menu bar.
 
 ## What it finds
 
@@ -22,10 +22,12 @@ anything until you choose to.
 - Gradle caches (Android Studio)
 - Homebrew downloads
 - pip, npm, Yarn, CocoaPods and Swift Package Manager caches
+- Xcode simulators (not selected by default)
 
 **App caches & logs**
 - Caches apps keep in `~/Library/Caches` (the system's own caches and those of running apps are skipped)
 - Log files in `~/Library/Logs`
+- Installers (.dmg, .pkg, .xip) in Downloads (not selected by default)
 
 **System**
 - CPU usage per core, memory and memory pressure, startup disk space, uptime
@@ -46,6 +48,10 @@ anything until you choose to.
 
 **Devices**
 - Displays, external drives, USB and Thunderbolt devices — names, sizes and speeds only.
+
+**Menu bar** (optional, in Settings)
+- Keep Sweeply running as a little broom in the menu bar, optionally with the CPU
+  temperature or usage next to it, and open it at login.
 
 Each category explains what it is and whether it comes back. Expand it to see every
 folder, reveal it in Finder, or untick the ones you want to keep.

@@ -33,6 +33,9 @@ SWIFT_PATTERNS = [
     re.compile(r"\brow\(" + LITERAL),
     re.compile(r"\bsection\(" + LITERAL),
     re.compile(r"\breading\(" + LITERAL),
+    re.compile(r"(?<![.\w])row\(" + LITERAL),
+    re.compile(r"\bPicker\(" + LITERAL),
+    re.compile(r"\bToggle\(" + LITERAL),
     re.compile(r"\bbadge: .*?" + LITERAL),
     re.compile(r"String\(localized: " + LITERAL),
 ]

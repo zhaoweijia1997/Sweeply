@@ -168,7 +168,11 @@ final class SystemModel {
         coreUsage.isEmpty ? nil : coreUsage.reduce(0, +) / Double(coreUsage.count)
     }
 
+    /// Several views (System tab, menu bar panel) can use it at once; it runs while any does.
+    private var users = 0
+
     func start() {
+        users += 1
         guard live, timer == nil else { return }
         refresh()
         timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { [weak self] _ in
@@ -177,6 +181,8 @@ final class SystemModel {
     }
 
     func stop() {
+        users = max(users - 1, 0)
+        guard users == 0 else { return }
         timer?.invalidate()
         timer = nil
     }

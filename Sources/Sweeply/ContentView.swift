@@ -95,6 +95,11 @@ struct ContentView: View {
             }
             .buttonStyle(.borderless)
             .help(Text("About Sweeply"))
+            SettingsLink {
+                Image(systemName: "gearshape")
+            }
+            .buttonStyle(.borderless)
+            .help(Text("Settings"))
             if tab == .clean {
                 Button {
                     model.scan()

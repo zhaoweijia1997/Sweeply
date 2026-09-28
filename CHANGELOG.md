@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.5.0 — unreleased
+
+- **Background mode with a menu bar icon** (Settings, off by default): closing the
+  window keeps Sweeply running as a little broom in the menu bar, without a Dock icon,
+  so writes per day keep being recorded. The icon can also show the CPU temperature or
+  usage. Its panel shows CPU, memory, temperature, fans, free space and today's writes.
+- **Open at login** (Settings): starts quietly in the menu bar. Uses the system's login
+  items, or a per-user launch agent when the system won't register the app.
+- **Settings** window (⌘,), also from the gear in the main window.
+- New cleanup categories, **not selected by default**: **Xcode simulators** (shown by
+  device and iOS version; running ones are skipped) and **installers in Downloads**
+  (.dmg, .pkg, .xip, with when they were downloaded).
+
 ## 0.4.0 — 2026-09-28
 
 - **System** tab: CPU usage per core, memory used and memory pressure (split like
