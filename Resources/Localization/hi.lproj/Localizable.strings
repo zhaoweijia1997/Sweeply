@@ -121,3 +121,10 @@
 "Fan speed isn't available on this Mac." = "इस Mac पर फ़ैन की स्पीड उपलब्ध नहीं है।";
 "Temperature sensors aren't available on this Mac." = "इस Mac पर तापमान सेंसर उपलब्ध नहीं हैं।";
 "Read from the Mac's own sensors. Which ones are available depends on the model." = "Mac के अपने सेंसर से पढ़ा गया। कौन-से सेंसर उपलब्ध हैं, यह मॉडल पर निर्भर करता है।";
+"Writes per day" = "हर दिन लिखा गया";
+"Average: %@ a day" = "औसत: %@ प्रति दिन";
+"Today: %@" = "आज: %@";
+"Sweeply notes the total whenever it's open. Check back tomorrow to see your first day." = "Sweeply हर बार खुलने पर कुल आंकड़ा नोट करता है। पहले दिन का डेटा देखने के लिए कल फिर देखें।";
+"Recorded since %@, on this Mac only." = "%@ से रिकॉर्ड हो रहा है, सिर्फ़ इसी Mac पर।";
+"Day" = "दिन";
+"Written" = "लिखा गया";

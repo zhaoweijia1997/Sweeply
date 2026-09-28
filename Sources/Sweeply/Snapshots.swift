@@ -21,7 +21,7 @@ enum Snapshots {
             for (name, model, tab) in pages {
             for dark in [false, true] {
                 let view = ContentView(
-                    model: model, system: .sample, disk: DiskHealthModel(state: .loaded(.sample)),
+                    model: model, system: .sample, disk: DiskHealthModel(state: .loaded(.sample), history: .sample, live: false),
                     devices: PeripheralsModel(peripherals: .sample, live: false), tab: tab)
                     .environment(\.locale, language.locale)
                     .frame(width: size.width, height: size.height)
@@ -50,6 +50,20 @@ enum Snapshots {
         guard let bitmap = hosting.bitmapImageRepForCachingDisplay(in: hosting.bounds) else { return nil }
         hosting.cacheDisplay(in: hosting.bounds, to: bitmap)
         return bitmap.representation(using: .png, properties: [:])
+    }
+}
+
+extension DiskWriteHistory {
+    /// Made-up month of writes for screenshots.
+    static var sample: DiskWriteHistory {
+        var history = DiskWriteHistory()
+        let start = Calendar.current.startOfDay(for: Date()).addingTimeInterval(-29 * 86_400 + 12 * 3600)
+        var total = 10_000_000_000_000.0
+        for day in 0..<30 {
+            history.record(total, at: start.addingTimeInterval(Double(day) * 86_400))
+            total += (18 + Double((day * 37) % 29)) * 1_000_000_000
+        }
+        return history
     }
 }
 

@@ -1,3 +1,4 @@
+import Charts
 import SwiftUI
 
 struct DiskHealthView: View {
@@ -81,6 +82,8 @@ struct DiskHealthView: View {
             // Cards in a row share the height of the tallest one.
             .fixedSize(horizontal: false, vertical: true)
 
+            writesPerDay
+
             Grid(horizontalSpacing: 14, verticalSpacing: 14) {
                 GridRow {
                     Stat(title: "Total read", value: formatBytes(Int64(health.bytesRead)))
@@ -108,6 +111,48 @@ struct DiskHealthView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private var writesPerDay: some View {
+        let history = model.history
+        let days = history.days(30)
+        let average = history.averagePerDay().map { formatBytes(Int64($0)) }
+        let today = formatBytes(Int64(days.last?.bytes ?? 0))
+        let since = history.firstDate?.formatted(.dateTime.year().month().day().locale(locale))
+        return Card {
+            HStack {
+                Text("Writes per day").foregroundStyle(.secondary)
+                Spacer()
+                if let average {
+                    Text("Average: \(average) a day").fontWeight(.medium)
+                }
+            }
+            if average == nil {
+                Text("Sweeply notes the total whenever it's open. Check back tomorrow to see your first day.")
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else {
+                Chart(days) { day in
+                    BarMark(x: .value("Day", day.date, unit: .day), y: .value("Written", day.bytes))
+                        .foregroundStyle(Color.accentColor.gradient)
+                }
+                .chartYAxis {
+                    AxisMarks { value in
+                        AxisGridLine()
+                        AxisValueLabel {
+                            if let bytes = value.as(Double.self) { Text(verbatim: formatBytes(Int64(bytes))) }
+                        }
+                    }
+                }
+                .frame(height: 130)
+                Text("Today: \(today)").font(.callout)
+            }
+            if let since {
+                Text("Recorded since \(since), on this Mac only.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 

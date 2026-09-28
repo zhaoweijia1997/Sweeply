@@ -121,3 +121,10 @@
 "Fan speed isn't available on this Mac." = "Скорость вентиляторов на этом Mac недоступна.";
 "Temperature sensors aren't available on this Mac." = "Датчики температуры на этом Mac недоступны.";
 "Read from the Mac's own sensors. Which ones are available depends on the model." = "Данные со встроенных датчиков Mac. Какие из них доступны, зависит от модели.";
+"Writes per day" = "Запись за день";
+"Average: %@ a day" = "В среднем %@ в день";
+"Today: %@" = "Сегодня: %@";
+"Sweeply notes the total whenever it's open. Check back tomorrow to see your first day." = "Sweeply записывает общий объём каждый раз, когда открыт. Загляните завтра — появится первый день.";
+"Recorded since %@, on this Mac only." = "Записывается с %@, только на этом Mac.";
+"Day" = "День";
+"Written" = "Записано";

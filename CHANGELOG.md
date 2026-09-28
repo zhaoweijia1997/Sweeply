@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.0 — unreleased
+
+- **System** tab: CPU usage per core, memory used and memory pressure (split like
+  Activity Monitor), swap, startup disk space, uptime.
+- **Temperature & fans**: hottest and average CPU core, SSD temperature, and each fan's
+  speed.
+- **Devices** tab: displays, external drives (name, size, free space, format, USB /
+  Thunderbolt / disk image), USB and Thunderbolt devices. No serial numbers, and nothing
+  on an external drive is read.
+- **Writes per day** on the Disk Health tab: Sweeply notes the drive's lifetime total
+  whenever it's open (at most hourly) and charts the last 30 days. Kept on this Mac only.
+
 ## 0.3.1 — 2026-09-28
 
 - Fix: Disk Health showed "isn't available" after the first read (for example after

@@ -121,3 +121,10 @@
 "Fan speed isn't available on this Mac." = "このMacではファンの回転数を読み取れません。";
 "Temperature sensors aren't available on this Mac." = "このMacでは温度センサーを読み取れません。";
 "Read from the Mac's own sensors. Which ones are available depends on the model." = "Mac内蔵のセンサーから読み取っています。読み取れる項目は機種によって異なります。";
+"Writes per day" = "1日あたりの書き込み量";
+"Average: %@ a day" = "平均 %@ / 日";
+"Today: %@" = "今日：%@";
+"Sweeply notes the total whenever it's open. Check back tomorrow to see your first day." = "Sweeplyは開くたびに総書き込み量を記録します。明日また開くと、最初の1日分が表示されます。";
+"Recorded since %@, on this Mac only." = "%@ から記録。データはこのMacにのみ保存されます。";
+"Day" = "日付";
+"Written" = "書き込み量";

@@ -12,7 +12,7 @@ anything until you choose to.
   <img src="docs/screenshots/main-en-light.png" width="720" alt="Sweeply showing developer caches and their sizes">
 </p>
 
-> **Status: early preview (0.3).** Scans, moves what you pick to the Trash, and shows your SSD's health.
+> **Status: early preview (0.4).** Cleans up, and gives your Mac a quick checkup: system, SSD health and connected devices.
 
 ## What it finds
 
@@ -27,13 +27,25 @@ anything until you choose to.
 - Caches apps keep in `~/Library/Caches` (the system's own caches and those of running apps are skipped)
 - Log files in `~/Library/Logs`
 
-**Disk Health** (new in 0.3)
+**System**
+- CPU usage per core, memory and memory pressure, startup disk space, uptime
+- CPU and SSD temperatures, fan speeds
+
+<p align="center">
+  <img src="docs/screenshots/system-en-light.png" width="620" alt="Sweeply's System tab">
+</p>
+
+**Disk Health**
 - How much has been written to your Mac's built-in SSD, how worn the drive thinks it
   is, its temperature, spare blocks and error counts — read straight from the drive.
+- Writes per day over the last 30 days (Sweeply notes the total whenever it's open).
 
 <p align="center">
   <img src="docs/screenshots/disk-en-light.png" width="620" alt="Sweeply's Disk Health tab">
 </p>
+
+**Devices**
+- Displays, external drives, USB and Thunderbolt devices — names, sizes and speeds only.
 
 Each category explains what it is and whether it comes back. Expand it to see every
 folder, reveal it in Finder, or untick the ones you want to keep.
@@ -47,6 +59,12 @@ folder, reveal it in Finder, or untick the ones you want to keep.
 - **Checked twice.** Right before moving, each item is checked again: still in its
   category's folder, still on this Mac's disk, and its app still not running.
 - **Works offline.** No accounts, no analytics, no network requests.
+- **No identifiers on screen.** No serial numbers, hardware IDs or accounts, so
+  screenshots are safe to share.
+
+SSD health, temperatures and fan speeds come from undocumented macOS interfaces (the
+same ones open-source system monitors use). If a macOS update changes them, those parts
+show "not available" instead.
 
 ## Languages
 

@@ -14,6 +14,10 @@ struct SweeplyApp: App {
         Window("Sweeply", id: "main") {
             ContentView(model: model, system: system, disk: disk, devices: devices)
                 .environment(\.locale, language.locale)
+                .task {
+                    // Rendering snapshots must not record this Mac's real disk writes.
+                    if !AppDelegate.isRenderingSnapshots { disk.startRecording() }
+                }
                 .frame(minWidth: 680, minHeight: 540)
         }
         .defaultSize(width: 780, height: 680)
@@ -21,6 +25,8 @@ struct SweeplyApp: App {
 }
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
+    static let isRenderingSnapshots = CommandLine.arguments.contains("--snapshot")
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Sweeply.app/Contents/MacOS/Sweeply --disk-health: print what Disk Health reads, for bug reports.
         // Reads twice through the same path as the tab, like opening it and pressing Refresh.

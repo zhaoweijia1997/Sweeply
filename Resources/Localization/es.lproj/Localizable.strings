@@ -121,3 +121,10 @@
 "Fan speed isn't available on this Mac." = "La velocidad de los ventiladores no está disponible en este Mac.";
 "Temperature sensors aren't available on this Mac." = "Los sensores de temperatura no están disponibles en este Mac.";
 "Read from the Mac's own sensors. Which ones are available depends on the model." = "Datos de los propios sensores del Mac. Los que están disponibles dependen del modelo.";
+"Writes per day" = "Escritura por día";
+"Average: %@ a day" = "Promedio: %@ al día";
+"Today: %@" = "Hoy: %@";
+"Sweeply notes the total whenever it's open. Check back tomorrow to see your first day." = "Sweeply anota el total cada vez que está abierto. Vuelve mañana para ver tu primer día.";
+"Recorded since %@, on this Mac only." = "Registrado desde el %@, solo en este Mac.";
+"Day" = "Día";
+"Written" = "Escrito";

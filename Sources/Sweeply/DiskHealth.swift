@@ -139,13 +139,39 @@ final class DiskHealthModel {
     }
 
     private(set) var state: State = .notLoaded
+    private(set) var history: DiskWriteHistory
+    private let historyURL: URL
+    /// False for made-up snapshot data: never read the real disk or save history.
+    private let live: Bool
+    private var timer: Timer?
 
-    init(state: State = .notLoaded) {
+    init(state: State = .notLoaded, history: DiskWriteHistory? = nil,
+         historyURL: URL = DiskWriteHistory.defaultURL, live: Bool = true) {
         self.state = state
+        self.historyURL = historyURL
+        self.live = live
+        self.history = history ?? (live ? DiskWriteHistory.load(from: historyURL) : DiskWriteHistory())
     }
 
     /// A read takes a few milliseconds, so it simply runs here on the main actor.
+    /// Every successful read also notes the lifetime total for the writes-per-day chart.
     func refresh() {
-        state = DiskHealth.readBuiltInDisk().map(State.loaded) ?? .unavailable
+        guard live else { return }
+        let health = DiskHealth.readBuiltInDisk()
+        state = health.map(State.loaded) ?? .unavailable
+        if let health {
+            history.record(health.bytesWritten)
+            history.save(to: historyURL)
+        }
+    }
+
+    /// Reads now and then hourly while Sweeply is open, so the chart fills in even if
+    /// the Disk Health tab isn't opened.
+    func startRecording() {
+        guard live, timer == nil else { return }
+        refresh()
+        timer = Timer.scheduledTimer(withTimeInterval: 3600, repeats: true) { [weak self] _ in
+            MainActor.assumeIsolated { self?.refresh() }
+        }
     }
 }

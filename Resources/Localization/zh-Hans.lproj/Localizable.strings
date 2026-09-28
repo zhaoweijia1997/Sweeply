@@ -121,3 +121,10 @@
 "Fan speed isn't available on this Mac." = "这台 Mac 读不到风扇转速。";
 "Temperature sensors aren't available on this Mac." = "这台 Mac 读不到温度传感器。";
 "Read from the Mac's own sensors. Which ones are available depends on the model." = "数据来自 Mac 自带的传感器，能读到哪些取决于机型。";
+"Writes per day" = "每天写入量";
+"Average: %@ a day" = "平均每天 %@";
+"Today: %@" = "今天：%@";
+"Sweeply notes the total whenever it's open. Check back tomorrow to see your first day." = "Sweeply 每次打开都会记下累计写入量。明天再来看，就能看到第一天的数据。";
+"Recorded since %@, on this Mac only." = "从 %@ 开始记录，数据只保存在这台 Mac 上。";
+"Day" = "日期";
+"Written" = "写入量";
