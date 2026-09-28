@@ -14,9 +14,12 @@ enum Snapshots {
     static func render(to folder: URL) {
         try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         for language in AppLanguage.allCases where language != .system {
-            for (name, model) in [("main", ScanModel.sample), ("cleaned", ScanModel.sampleAfterCleanup)] {
+            let pages: [(String, ScanModel, ContentView.Tab)] = [
+                ("main", .sample, .clean), ("cleaned", .sampleAfterCleanup, .clean), ("disk", .sample, .disk),
+            ]
+            for (name, model, tab) in pages {
             for dark in [false, true] {
-                let view = ContentView(model: model)
+                let view = ContentView(model: model, disk: DiskHealthModel(state: .loaded(.sample)), tab: tab)
                     .environment(\.locale, language.locale)
                     .frame(width: size.width, height: size.height)
                     // A borderless off-screen window doesn't paint its background.
@@ -45,6 +48,14 @@ enum Snapshots {
         hosting.cacheDisplay(in: hosting.bounds, to: bitmap)
         return bitmap.representation(using: .png, properties: [:])
     }
+}
+
+extension DiskHealth {
+    /// Made-up readings for screenshots.
+    static let sample = DiskHealth(
+        model: "APPLE SSD", capacity: 512_000_000_000, bytesWritten: 10_960_000_000_000, bytesRead: 25_150_000_000_000,
+        percentageUsed: 2, availableSpare: 100, spareThreshold: 99, temperature: 32, powerOnHours: 3510,
+        powerCycles: 254, unsafeShutdowns: 18, mediaErrors: 0, criticalWarning: 0)
 }
 
 extension ScanModel {

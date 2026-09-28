@@ -27,6 +27,10 @@ anything until you choose to.
 - Caches apps keep in `~/Library/Caches` (the system's own caches and those of running apps are skipped)
 - Log files in `~/Library/Logs`
 
+**Disk Health** (new in 0.3)
+- How much has been written to your Mac's built-in SSD, how worn the drive thinks it
+  is, its temperature, spare blocks and error counts — read straight from the drive.
+
 Each category explains what it is and whether it comes back. Expand it to see every
 folder, reveal it in Finder, or untick the ones you want to keep.
 

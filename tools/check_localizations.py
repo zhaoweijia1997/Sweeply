@@ -28,7 +28,8 @@ SWIFT_PATTERNS = [
     re.compile(r"\bButton\(" + LITERAL),
     re.compile(r"\bLabel\(" + LITERAL),
     re.compile(r"\bLocalizedStringKey\(" + LITERAL),
-    re.compile(r"\b(?:title|detail): " + LITERAL),
+    re.compile(r"\b(?:title|detail|note): " + LITERAL),
+    re.compile(r"\(" + LITERAL + r", \.\w+\)"),  # ("Good", .green)
 ]
 # Only in CleanCategory.swift: `case .developer: "Developer tools"` (group titles).
 CATEGORY_PATTERN = re.compile(r"case \.\w+: " + LITERAL)

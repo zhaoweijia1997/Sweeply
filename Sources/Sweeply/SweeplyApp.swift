@@ -6,10 +6,11 @@ struct SweeplyApp: App {
     @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
     @AppStorage(AppLanguage.storageKey) private var language: AppLanguage = .system
     @State private var model = ScanModel()
+    @State private var disk = DiskHealthModel()
 
     var body: some Scene {
         Window("Sweeply", id: "main") {
-            ContentView(model: model)
+            ContentView(model: model, disk: disk)
                 .environment(\.locale, language.locale)
                 .frame(minWidth: 680, minHeight: 540)
         }

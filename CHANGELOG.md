@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0 — unreleased
+
+- **Disk Health** tab: total data written and read, the drive's own wear estimate
+  ("life used"), spare blocks, temperature, power-on time, power cycles, unsafe
+  shutdowns and media errors, with a plain-language verdict. Read-only, straight from
+  the built-in SSD's NVMe SMART log; external drives are never read.
+
 ## 0.2.0 — 2026-09-28
 
 - **Move to Trash.** Tick categories — or single folders inside them — and move them to

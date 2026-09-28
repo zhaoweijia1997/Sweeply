@@ -2,29 +2,58 @@ import AppKit
 import SwiftUI
 
 struct ContentView: View {
+    enum Tab: Hashable {
+        case clean, disk
+    }
+
     let model: ScanModel
+    let disk: DiskHealthModel
 
     @AppStorage(AppLanguage.storageKey) private var language: AppLanguage = .system
+    @State private var tab: Tab
     @State private var showingAbout = false
     @State private var confirmingClean = false
+
+    init(model: ScanModel, disk: DiskHealthModel, tab: Tab = .clean) {
+        self.model = model
+        self.disk = disk
+        _tab = State(initialValue: tab)
+    }
 
     var body: some View {
         VStack(spacing: 0) {
             header
-                .padding(20)
-            Divider()
-            Group {
-                if model.hasStarted {
-                    results
-                } else {
-                    EmptyState()
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            Divider()
-            footer
                 .padding(.horizontal, 20)
-                .padding(.vertical, 14)
+                .padding(.top, 20)
+                .padding(.bottom, 14)
+            Picker(selection: $tab) {
+                Text("Clean Up").tag(Tab.clean)
+                Text("Disk Health").tag(Tab.disk)
+            } label: {
+                EmptyView()
+            }
+            .pickerStyle(.segmented)
+            .labelsHidden()
+            .fixedSize()
+            .padding(.bottom, 14)
+            Divider()
+            switch tab {
+            case .clean:
+                Group {
+                    if model.hasStarted {
+                        results
+                    } else {
+                        EmptyState()
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                Divider()
+                footer
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 14)
+            case .disk:
+                DiskHealthView(model: disk)
+            }
         }
         .sheet(isPresented: $showingAbout) { AboutView() }
         .confirmationDialog("Move the selected items to the Trash?", isPresented: $confirmingClean) {
@@ -56,16 +85,18 @@ struct ContentView: View {
             }
             .buttonStyle(.borderless)
             .help(Text("About Sweeply"))
-            Button {
-                model.scan()
-            } label: {
-                Text(model.hasStarted ? LocalizedStringKey("Scan Again") : LocalizedStringKey("Scan"))
-                    .frame(minWidth: 70)
+            if tab == .clean {
+                Button {
+                    model.scan()
+                } label: {
+                    Text(model.hasStarted ? LocalizedStringKey("Scan Again") : LocalizedStringKey("Scan"))
+                        .frame(minWidth: 70)
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
+                .keyboardShortcut(.defaultAction)
+                .disabled(model.isBusy)
             }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
-            .keyboardShortcut(.defaultAction)
-            .disabled(model.isBusy)
         }
     }
 
