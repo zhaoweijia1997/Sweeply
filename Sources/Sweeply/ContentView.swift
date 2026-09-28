@@ -170,11 +170,24 @@ struct ContentView: View {
 
 // MARK: - Rows
 
+/// Snapshots set this to show every category's items.
+struct ExpandAllItemsKey: EnvironmentKey {
+    static let defaultValue = false
+}
+
+extension EnvironmentValues {
+    var expandAllItems: Bool {
+        get { self[ExpandAllItemsKey.self] }
+        set { self[ExpandAllItemsKey.self] = newValue }
+    }
+}
+
 private struct CategoryRow: View {
     let category: CleanCategory
     let model: ScanModel
 
     @State private var expanded = false
+    @Environment(\.expandAllItems) private var expandAll
 
     private var result: CategoryResult? { model.results[category.id] }
     private var hasItems: Bool { !(result?.items.isEmpty ?? true) }
@@ -195,9 +208,15 @@ private struct CategoryRow: View {
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                     if let skipped = result?.skippedRunning.count, skipped > 0 {
-                        Text("Skipped because the app is running: \(skipped)")
-                            .font(.callout)
-                            .foregroundStyle(.orange)
+                        Group {
+                            if case .simulatorDevices = category.source {
+                                Text("Running simulators skipped: \(skipped)")
+                            } else {
+                                Text("Skipped because the app is running: \(skipped)")
+                            }
+                        }
+                        .font(.callout)
+                        .foregroundStyle(.orange)
                     }
                     if let result, hasItems {
                         Button {
@@ -225,6 +244,7 @@ private struct CategoryRow: View {
         }
         .padding(12)
         .opacity(result != nil && !hasItems ? 0.55 : 1)
+        .onAppear { if expandAll { expanded = true } }
     }
 
     @ViewBuilder
@@ -250,6 +270,8 @@ private struct ItemList: View {
     let model: ScanModel
     private let limit = 50
 
+    @Environment(\.locale) private var locale
+
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             ForEach(items.prefix(limit)) { item in
@@ -263,6 +285,12 @@ private struct ItemList: View {
                         .lineLimit(1)
                         .truncationMode(.middle)
                         .help(Text(verbatim: item.url.path))
+                    if let date = item.date {
+                        let ago = date.formatted(.relative(presentation: .named).locale(locale))
+                        Text("Downloaded \(ago)")
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                    }
                     Spacer(minLength: 8)
                     Text(formatBytes(item.size))
                         .foregroundStyle(.secondary)

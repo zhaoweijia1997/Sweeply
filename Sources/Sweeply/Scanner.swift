@@ -5,9 +5,42 @@ struct FoundItem: Identifiable, Hashable, Sendable {
     let url: URL
     /// Space it takes on disk, in bytes.
     let size: Int64
+    /// A readable name when the file name isn't one (simulators are named by UUID).
+    var label: String? = nil
+    /// When it was downloaded or last changed, shown for installers.
+    var date: Date? = nil
 
     var id: String { url.path }
-    var name: String { url.lastPathComponent }
+    var name: String { label ?? url.lastPathComponent }
+}
+
+/// Reads a simulator's device.plist (name, OS, whether it's running).
+enum SimulatorDevice {
+    static func isDeviceFolder(_ url: URL) -> Bool {
+        UUID(uuidString: url.lastPathComponent) != nil
+            && FileManager.default.fileExists(atPath: url.appending(path: "device.plist").path)
+    }
+
+    /// "iPhone 17 Pro · iOS 26.2"
+    static func label(_ url: URL) -> String? {
+        guard let plist = info(url), let name = plist["name"] as? String else { return nil }
+        let runtime = (plist["runtime"] as? String)?
+            .replacingOccurrences(of: "com.apple.CoreSimulator.SimRuntime.", with: "")
+            .split(separator: "-", maxSplits: 1)
+            .enumerated()
+            .map { $0.offset == 0 ? String($0.element) : $0.element.replacingOccurrences(of: "-", with: ".") }
+            .joined(separator: " ")
+        return runtime.map { "\(name) · \($0)" } ?? name
+    }
+
+    /// CoreSimulator's state 3 means booted.
+    static func isRunning(_ url: URL) -> Bool {
+        info(url)?["state"] as? Int == 3
+    }
+
+    private static func info(_ url: URL) -> [String: Any]? {
+        NSDictionary(contentsOf: url.appending(path: "device.plist")) as? [String: Any]
+    }
 }
 
 struct CategoryResult: Sendable {
@@ -24,13 +57,26 @@ enum Scanner {
     static func scan(_ category: CleanCategory, home: URL, runningApps: Set<String>) -> CategoryResult {
         var result = CategoryResult()
         for url in category.candidates(home: home) {
-            if case .appCaches = category.source, belongsToRunningApp(url.lastPathComponent, runningApps) {
+            var item = FoundItem(url: url, size: 0)
+            switch category.source {
+            case .appCaches where belongsToRunningApp(url.lastPathComponent, runningApps):
                 result.skippedRunning.append(url.lastPathComponent)
                 continue
+            case .simulatorDevices:
+                item.label = SimulatorDevice.label(url)
+                if SimulatorDevice.isRunning(url) {
+                    result.skippedRunning.append(item.name)
+                    continue
+                }
+            case .installers:
+                item.date = (try? url.resourceValues(forKeys: [.addedToDirectoryDateKey, .contentModificationDateKey]))
+                    .flatMap { $0.addedToDirectoryDate ?? $0.contentModificationDate }
+            default:
+                break
             }
             let size = allocatedSize(of: url)
             if size > 0 {
-                result.items.append(FoundItem(url: url, size: size))
+                result.items.append(FoundItem(url: url, size: size, label: item.label, date: item.date))
             }
         }
         result.items.sort { $0.size > $1.size }

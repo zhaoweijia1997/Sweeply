@@ -58,6 +58,13 @@ enum Cleaner {
                   !name.hasPrefix("com.apple."),
                   !Scanner.belongsToRunningApp(name, runningApps) else { return false }
             allowedFolders = [home.appending(path: "Library/Caches").resolvingSymlinksInPath().path]
+        case .simulatorDevices:
+            // Only a device folder (never device_set.plist), and never one that's running now.
+            guard SimulatorDevice.isDeviceFolder(item), !SimulatorDevice.isRunning(item) else { return false }
+            allowedFolders = [home.appending(path: CleanCategory.simulatorDevicesFolder).resolvingSymlinksInPath().path]
+        case let .installers(folder, extensions):
+            guard extensions.contains(item.pathExtension.lowercased()) else { return false }
+            allowedFolders = [home.appending(path: folder).resolvingSymlinksInPath().path]
         }
         guard allowedFolders.contains(parent) else { return false }
 

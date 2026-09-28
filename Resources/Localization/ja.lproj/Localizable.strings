@@ -128,3 +128,9 @@
 "Recorded since %@, on this Mac only." = "%@ から記録。データはこのMacにのみ保存されます。";
 "Day" = "日付";
 "Written" = "書き込み量";
+"Xcode simulators" = "Xcodeのシミュレータ";
+"Simulated iPhones and iPads that Xcode created, including the apps and data installed on them. Xcode makes new ones when needed. Running simulators are skipped; quit Simulator and Xcode first." = "Xcodeが作成した仮想のiPhoneやiPad（中にインストールしたアプリやデータを含む）。必要になればXcodeが新しく作成します。実行中のシミュレータはスキップされます。先にシミュレータとXcodeを終了してください。";
+"Installers in Downloads" = "ダウンロード内のインストーラ";
+"Installer files (.dmg, .pkg, .xip) in your Downloads folder. Once the app is installed you usually don't need them. macOS may ask whether Sweeply can see your Downloads folder." = "ダウンロードフォルダ内のインストーラ（.dmg、.pkg、.xip）。アプリをインストールした後は通常不要です。SweeplyがダウンロードフォルダにアクセスすることについてmacOSが確認する場合があります。";
+"Running simulators skipped: %lld" = "実行中のためスキップしたシミュレータ：%lld";
+"Downloaded %@" = "%@にダウンロード";

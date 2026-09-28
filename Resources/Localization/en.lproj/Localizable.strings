@@ -131,3 +131,9 @@
 "Recorded since %@, on this Mac only." = "Recorded since %@, on this Mac only.";
 "Day" = "Day";
 "Written" = "Written";
+"Xcode simulators" = "Xcode simulators";
+"Simulated iPhones and iPads that Xcode created, including the apps and data installed on them. Xcode makes new ones when needed. Running simulators are skipped; quit Simulator and Xcode first." = "Simulated iPhones and iPads that Xcode created, including the apps and data installed on them. Xcode makes new ones when needed. Running simulators are skipped; quit Simulator and Xcode first.";
+"Installers in Downloads" = "Installers in Downloads";
+"Installer files (.dmg, .pkg, .xip) in your Downloads folder. Once the app is installed you usually don't need them. macOS may ask whether Sweeply can see your Downloads folder." = "Installer files (.dmg, .pkg, .xip) in your Downloads folder. Once the app is installed you usually don't need them. macOS may ask whether Sweeply can see your Downloads folder.";
+"Running simulators skipped: %lld" = "Running simulators skipped: %lld";
+"Downloaded %@" = "Downloaded %@";

@@ -25,6 +25,12 @@ struct CleanCategory: Identifiable, Sendable {
         /// Everything in ~/Library/Caches, except folders another category claims
         /// and the system's own caches (com.apple.*).
         case appCaches
+        /// Xcode's simulated devices: one folder per device (named by its UUID) in
+        /// ~/Library/Developer/CoreSimulator/Devices. The device_set.plist next to them
+        /// is never touched.
+        case simulatorDevices
+        /// Installer files directly in ~/Downloads.
+        case installers(in: String, extensions: Set<String>)
     }
 
     let id: String
@@ -79,6 +85,12 @@ extension CleanCategory {
             selectedByDefault: true,
             source: .contents(of: [".gradle/caches"])),
         CleanCategory(
+            id: "xcode.simulators", group: .developer,
+            title: "Xcode simulators",
+            detail: "Simulated iPhones and iPads that Xcode created, including the apps and data installed on them. Xcode makes new ones when needed. Running simulators are skipped; quit Simulator and Xcode first.",
+            selectedByDefault: false,
+            source: .simulatorDevices),
+        CleanCategory(
             id: "homebrew", group: .developer,
             title: "Homebrew downloads",
             detail: "Installer files Homebrew downloaded. Your installed packages are not affected.",
@@ -108,6 +120,12 @@ extension CleanCategory {
             detail: "Log files written by apps. Only useful for troubleshooting.",
             selectedByDefault: true,
             source: .contents(of: ["Library/Logs"])),
+        CleanCategory(
+            id: "downloads.installers", group: .appData,
+            title: "Installers in Downloads",
+            detail: "Installer files (.dmg, .pkg, .xip) in your Downloads folder. Once the app is installed you usually don't need them. macOS may ask whether Sweeply can see your Downloads folder.",
+            selectedByDefault: false,
+            source: .installers(in: "Downloads", extensions: ["dmg", "pkg", "mpkg", "xip"])),
     ]
 
     /// Folders inside ~/Library/Caches that a more specific category owns,
@@ -134,8 +152,18 @@ extension CleanCategory {
                 let name = $0.lastPathComponent
                 return !Self.claimedCacheFolders.contains(name) && !name.hasPrefix("com.apple.")
             }
+        case .simulatorDevices:
+            return Self.children(of: home.appending(path: Self.simulatorDevicesFolder)).filter {
+                SimulatorDevice.isDeviceFolder($0)
+            }
+        case let .installers(folder, extensions):
+            return Self.children(of: home.appending(path: folder)).filter {
+                extensions.contains($0.pathExtension.lowercased())
+            }
         }
     }
+
+    static let simulatorDevicesFolder = "Library/Developer/CoreSimulator/Devices"
 
     private static let ignoredNames: Set<String> = [".DS_Store", ".localized"]
 

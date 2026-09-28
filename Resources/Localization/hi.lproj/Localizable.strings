@@ -128,3 +128,9 @@
 "Recorded since %@, on this Mac only." = "%@ से रिकॉर्ड हो रहा है, सिर्फ़ इसी Mac पर।";
 "Day" = "दिन";
 "Written" = "लिखा गया";
+"Xcode simulators" = "Xcode सिम्युलेटर";
+"Simulated iPhones and iPads that Xcode created, including the apps and data installed on them. Xcode makes new ones when needed. Running simulators are skipped; quit Simulator and Xcode first." = "Xcode द्वारा बनाए गए वर्चुअल iPhone और iPad, उनमें इंस्टॉल ऐप और डेटा सहित। ज़रूरत पड़ने पर Xcode नए बना लेता है। चल रहे सिम्युलेटर छोड़ दिए जाते हैं; पहले Simulator और Xcode बंद करें।";
+"Installers in Downloads" = "Downloads में इंस्टॉलर";
+"Installer files (.dmg, .pkg, .xip) in your Downloads folder. Once the app is installed you usually don't need them. macOS may ask whether Sweeply can see your Downloads folder." = "आपके Downloads फ़ोल्डर में इंस्टॉलर फ़ाइलें (.dmg, .pkg, .xip)। ऐप इंस्टॉल हो जाने के बाद आमतौर पर इनकी ज़रूरत नहीं रहती। macOS पूछ सकता है कि क्या Sweeply आपका Downloads फ़ोल्डर देख सकता है।";
+"Running simulators skipped: %lld" = "चल रहे सिम्युलेटर छोड़े गए: %lld";
+"Downloaded %@" = "डाउनलोड: %@";

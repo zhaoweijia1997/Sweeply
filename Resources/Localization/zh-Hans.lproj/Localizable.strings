@@ -128,3 +128,9 @@
 "Recorded since %@, on this Mac only." = "从 %@ 开始记录，数据只保存在这台 Mac 上。";
 "Day" = "日期";
 "Written" = "写入量";
+"Xcode simulators" = "Xcode 模拟器";
+"Simulated iPhones and iPads that Xcode created, including the apps and data installed on them. Xcode makes new ones when needed. Running simulators are skipped; quit Simulator and Xcode first." = "Xcode 创建的虚拟 iPhone 和 iPad，连同装在里面的 App 和数据。需要时 Xcode 会重新创建。正在运行的模拟器会跳过，清理前请先退出模拟器和 Xcode。";
+"Installers in Downloads" = "下载文件夹里的安装包";
+"Installer files (.dmg, .pkg, .xip) in your Downloads folder. Once the app is installed you usually don't need them. macOS may ask whether Sweeply can see your Downloads folder." = "下载文件夹里的安装文件（.dmg、.pkg、.xip）。App 装好之后一般就用不到了。macOS 可能会询问是否允许 Sweeply 查看下载文件夹。";
+"Running simulators skipped: %lld" = "已跳过正在运行的模拟器：%lld";
+"Downloaded %@" = "%@下载";

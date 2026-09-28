@@ -16,19 +16,22 @@ enum Snapshots {
         for language in AppLanguage.allCases where language != .system {
             let pages: [(String, ScanModel, ContentView.Tab)] = [
                 ("main", .sample, .clean), ("cleaned", .sampleAfterCleanup, .clean), ("system", .sample, .system),
-                ("disk", .sample, .disk), ("devices", .sample, .devices),
+                ("disk", .sample, .disk), ("devices", .sample, .devices), ("items", .sample, .clean),
             ]
             for (name, model, tab) in pages {
+            // The expanded list is long; render it tall enough to show every category.
+            let height: CGFloat = name == "items" ? 2600 : size.height
             for dark in [false, true] {
                 let view = ContentView(
                     model: model, system: .sample, disk: DiskHealthModel(state: .loaded(.sample), history: .sample, live: false),
                     devices: PeripheralsModel(peripherals: .sample, live: false), tab: tab)
+                    .environment(\.expandAllItems, name == "items")
                     .environment(\.locale, language.locale)
-                    .frame(width: size.width, height: size.height)
+                    .frame(width: size.width, height: height)
                     // A borderless off-screen window doesn't paint its background.
                     .background(Color(nsColor: .windowBackgroundColor))
                 let file = "\(name)-\(language.rawValue)-\(dark ? "dark" : "light").png"
-                if let png = draw(view, dark: dark) {
+                if let png = draw(view, dark: dark, height: height) {
                     try? png.write(to: folder.appending(path: file))
                 }
             }
@@ -38,9 +41,9 @@ enum Snapshots {
 
     /// Draws the view in an off-screen window, so AppKit-backed controls
     /// (buttons, menus, scroll views) render too. Needs no screen-recording permission.
-    private static func draw(_ view: some View, dark: Bool) -> Data? {
+    private static func draw(_ view: some View, dark: Bool, height: CGFloat) -> Data? {
         let hosting = NSHostingView(rootView: view)
-        hosting.frame = NSRect(origin: .zero, size: size)
+        hosting.frame = NSRect(origin: .zero, size: NSSize(width: size.width, height: height))
         let window = NSWindow(contentRect: hosting.frame, styleMask: [.borderless], backing: .buffered, defer: false)
         window.appearance = NSAppearance(named: dark ? .darkAqua : .aqua)
         window.contentView = hosting
@@ -145,6 +148,14 @@ extension ScanModel {
             "packageCaches": found("Library/Caches", [("pip", 180 * mb), ("CocoaPods", 64 * mb)]),
             "app.caches": appCaches,
             "app.logs": found("Library/Logs", [("DiagnosticReports", 30 * mb)]),
+            "xcode.simulators": CategoryResult(items: [
+                FoundItem(url: URL(fileURLWithPath: "/Users/you/Library/Developer/CoreSimulator/Devices/A"), size: 4_600 * mb, label: "iPhone 17 Pro · iOS 26.2"),
+                FoundItem(url: URL(fileURLWithPath: "/Users/you/Library/Developer/CoreSimulator/Devices/B"), size: 13 * mb, label: "iPad mini · iOS 16.1"),
+            ], skippedRunning: ["iPhone 16e · iOS 26.4"]),
+            "downloads.installers": CategoryResult(items: [
+                FoundItem(url: URL(fileURLWithPath: "/Users/you/Downloads/SomeApp-2.1.dmg"), size: 310 * mb, date: Date().addingTimeInterval(-40 * 86_400)),
+                FoundItem(url: URL(fileURLWithPath: "/Users/you/Downloads/Driver.pkg"), size: 45 * mb, date: Date().addingTimeInterval(-3 * 86_400)),
+            ]),
         ])
     }
 }
