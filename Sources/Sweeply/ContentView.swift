@@ -3,22 +3,24 @@ import SwiftUI
 
 struct ContentView: View {
     enum Tab: Hashable {
-        case clean, system, disk
+        case clean, system, disk, devices
     }
 
     let model: ScanModel
     let system: SystemModel
     let disk: DiskHealthModel
+    let devices: PeripheralsModel
 
     @AppStorage(AppLanguage.storageKey) private var language: AppLanguage = .system
     @State private var tab: Tab
     @State private var showingAbout = false
     @State private var confirmingClean = false
 
-    init(model: ScanModel, system: SystemModel, disk: DiskHealthModel, tab: Tab = .clean) {
+    init(model: ScanModel, system: SystemModel, disk: DiskHealthModel, devices: PeripheralsModel, tab: Tab = .clean) {
         self.model = model
         self.system = system
         self.disk = disk
+        self.devices = devices
         _tab = State(initialValue: tab)
     }
 
@@ -32,6 +34,7 @@ struct ContentView: View {
                 Text("Clean Up").tag(Tab.clean)
                 Text("System").tag(Tab.system)
                 Text("Disk Health").tag(Tab.disk)
+                Text("Devices").tag(Tab.devices)
             } label: {
                 EmptyView()
             }
@@ -58,6 +61,8 @@ struct ContentView: View {
                 SystemView(model: system)
             case .disk:
                 DiskHealthView(model: disk)
+            case .devices:
+                DevicesView(model: devices)
             }
         }
         .sheet(isPresented: $showingAbout) { AboutView() }

@@ -100,3 +100,17 @@
 "Normal" = "Normal";
 "Elevated" = "Elevated";
 "Critical" = "Critical";
+"Devices" = "Devices";
+"Displays" = "Displays";
+"Display" = "Display";
+"Built-in" = "Built-in";
+"External drives" = "External drives";
+"USB devices" = "USB devices";
+"Thunderbolt devices" = "Thunderbolt devices";
+"None connected" = "None connected";
+"%@ free of %@" = "%@ free of %@";
+"USB" = "USB";
+"Thunderbolt" = "Thunderbolt";
+"Disk image" = "Disk image";
+"Other" = "Other";
+"Only names, sizes and speeds are shown. Sweeply never reads what's on external drives, and never shows serial numbers." = "Only names, sizes and speeds are shown. Sweeply never reads what's on external drives, and never shows serial numbers.";

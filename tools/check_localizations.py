@@ -31,6 +31,9 @@ SWIFT_PATTERNS = [
     re.compile(r"\b(?:title|detail|note): " + LITERAL),
     re.compile(r"\(" + LITERAL + r", \.\w+\)"),  # ("Good", .green)
     re.compile(r"\brow\(" + LITERAL),
+    re.compile(r"\bsection\(" + LITERAL),
+    re.compile(r"\bbadge: .*?" + LITERAL),
+    re.compile(r"String\(localized: " + LITERAL),
 ]
 # `case .developer: "Developer tools"`, `case .normal: "Normal"`.
 CATEGORY_PATTERN = re.compile(r"case \.\w+: " + LITERAL)

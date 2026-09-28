@@ -8,10 +8,11 @@ struct SweeplyApp: App {
     @State private var model = ScanModel()
     @State private var system = SystemModel()
     @State private var disk = DiskHealthModel()
+    @State private var devices = PeripheralsModel()
 
     var body: some Scene {
         Window("Sweeply", id: "main") {
-            ContentView(model: model, system: system, disk: disk)
+            ContentView(model: model, system: system, disk: disk, devices: devices)
                 .environment(\.locale, language.locale)
                 .frame(minWidth: 680, minHeight: 540)
         }

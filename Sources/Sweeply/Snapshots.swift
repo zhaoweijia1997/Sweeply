@@ -16,11 +16,13 @@ enum Snapshots {
         for language in AppLanguage.allCases where language != .system {
             let pages: [(String, ScanModel, ContentView.Tab)] = [
                 ("main", .sample, .clean), ("cleaned", .sampleAfterCleanup, .clean), ("system", .sample, .system),
-                ("disk", .sample, .disk),
+                ("disk", .sample, .disk), ("devices", .sample, .devices),
             ]
             for (name, model, tab) in pages {
             for dark in [false, true] {
-                let view = ContentView(model: model, system: .sample, disk: DiskHealthModel(state: .loaded(.sample)), tab: tab)
+                let view = ContentView(
+                    model: model, system: .sample, disk: DiskHealthModel(state: .loaded(.sample)),
+                    devices: PeripheralsModel(peripherals: .sample, live: false), tab: tab)
                     .environment(\.locale, language.locale)
                     .frame(width: size.width, height: size.height)
                     // A borderless off-screen window doesn't paint its background.
@@ -49,6 +51,23 @@ enum Snapshots {
         hosting.cacheDisplay(in: hosting.bounds, to: bitmap)
         return bitmap.representation(using: .png, properties: [:])
     }
+}
+
+extension Peripherals {
+    /// Made-up devices for screenshots.
+    static let sample = Peripherals(
+        displays: [Display(id: 1, name: "External Display", pixelWidth: 3840, pixelHeight: 2160, refreshRate: 60, isBuiltIn: false)],
+        drives: [
+            Drive(path: "/Volumes/Backup", name: "Backup", capacity: 2_000_000_000_000, available: 1_240_000_000_000,
+                  format: "APFS", connection: .usb),
+            Drive(path: "/Volumes/Photos", name: "Photos", capacity: 1_000_000_000_000, available: 310_000_000_000,
+                  format: "APFS", connection: .thunderbolt),
+        ],
+        usb: [
+            USBDevice(id: 1, name: "Wireless Receiver", vendor: "Example", speed: 1),
+            USBDevice(id: 2, name: "Portable SSD", vendor: "Example", speed: 4),
+        ],
+        thunderbolt: [ThunderboltDevice(id: 3, name: "Thunderbolt Dock", vendor: "Example")])
 }
 
 extension SystemModel {

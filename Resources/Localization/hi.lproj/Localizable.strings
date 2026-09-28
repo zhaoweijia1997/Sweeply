@@ -97,3 +97,17 @@
 "Normal" = "सामान्य";
 "Elevated" = "बढ़ा हुआ";
 "Critical" = "गंभीर";
+"Devices" = "डिवाइस";
+"Displays" = "डिस्प्ले";
+"Display" = "डिस्प्ले";
+"Built-in" = "अंदरूनी";
+"External drives" = "बाहरी ड्राइव";
+"USB devices" = "USB डिवाइस";
+"Thunderbolt devices" = "Thunderbolt डिवाइस";
+"None connected" = "कोई कनेक्ट नहीं है";
+"%@ free of %@" = "%@ खाली, कुल %@";
+"USB" = "USB";
+"Thunderbolt" = "Thunderbolt";
+"Disk image" = "डिस्क इमेज";
+"Other" = "अन्य";
+"Only names, sizes and speeds are shown. Sweeply never reads what's on external drives, and never shows serial numbers." = "सिर्फ़ नाम, साइज़ और स्पीड दिखाई जाती है। Sweeply बाहरी ड्राइव की सामग्री कभी नहीं पढ़ता और सीरियल नंबर कभी नहीं दिखाता।";

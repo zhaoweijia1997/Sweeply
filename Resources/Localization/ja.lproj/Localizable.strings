@@ -97,3 +97,17 @@
 "Normal" = "正常";
 "Elevated" = "高め";
 "Critical" = "危険";
+"Devices" = "デバイス";
+"Displays" = "ディスプレイ";
+"Display" = "ディスプレイ";
+"Built-in" = "内蔵";
+"External drives" = "外部ドライブ";
+"USB devices" = "USBデバイス";
+"Thunderbolt devices" = "Thunderboltデバイス";
+"None connected" = "接続されていません";
+"%@ free of %@" = "空き %@ / %@";
+"USB" = "USB";
+"Thunderbolt" = "Thunderbolt";
+"Disk image" = "ディスクイメージ";
+"Other" = "その他";
+"Only names, sizes and speeds are shown. Sweeply never reads what's on external drives, and never shows serial numbers." = "名前、容量、速度のみを表示します。Sweeplyが外部ドライブの中身を読むことはなく、シリアル番号も表示しません。";

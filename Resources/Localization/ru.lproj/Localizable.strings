@@ -97,3 +97,17 @@
 "Normal" = "Нормальная";
 "Elevated" = "Повышенная";
 "Critical" = "Критическая";
+"Devices" = "Устройства";
+"Displays" = "Мониторы";
+"Display" = "Монитор";
+"Built-in" = "Встроенный";
+"External drives" = "Внешние диски";
+"USB devices" = "USB-устройства";
+"Thunderbolt devices" = "Устройства Thunderbolt";
+"None connected" = "Не подключено";
+"%@ free of %@" = "Свободно %@ из %@";
+"USB" = "USB";
+"Thunderbolt" = "Thunderbolt";
+"Disk image" = "Образ диска";
+"Other" = "Другое";
+"Only names, sizes and speeds are shown. Sweeply never reads what's on external drives, and never shows serial numbers." = "Показываются только названия, объём и скорость. Sweeply никогда не читает содержимое внешних дисков и не показывает серийные номера.";

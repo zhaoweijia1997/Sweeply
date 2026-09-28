@@ -97,3 +97,17 @@
 "Normal" = "正常";
 "Elevated" = "偏高";
 "Critical" = "緊張";
+"Devices" = "周邊裝置";
+"Displays" = "顯示器";
+"Display" = "顯示器";
+"Built-in" = "內建";
+"External drives" = "外接硬碟";
+"USB devices" = "USB 裝置";
+"Thunderbolt devices" = "Thunderbolt 裝置";
+"None connected" = "未連接";
+"%@ free of %@" = "可用 %@，共 %@";
+"USB" = "USB";
+"Thunderbolt" = "Thunderbolt";
+"Disk image" = "磁碟映像檔";
+"Other" = "其他";
+"Only names, sizes and speeds are shown. Sweeply never reads what's on external drives, and never shows serial numbers." = "這裡只顯示名稱、容量和速度。Sweeply 從不讀取外接硬碟裡的內容，也不顯示任何序號。";
