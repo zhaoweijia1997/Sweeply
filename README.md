@@ -92,7 +92,7 @@ see [.github/donate](.github/donate).
 
 ## Contact
 
-Bugs and ideas: [open an issue](../../issues). Email: zhaoweijiaboy@gmail.com
+Bugs and ideas: [open an issue](../../issues). Email: zhaoweijia1997@gmail.com
 
 ## License
 

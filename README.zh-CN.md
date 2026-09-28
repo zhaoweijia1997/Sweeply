@@ -85,7 +85,7 @@ Sweeply 是免费的。如果它帮你腾出了空间，可以请开发者喝杯
 
 ## 联系
 
-问题和建议：[提交 Issue](../../issues)。邮箱：zhaoweijiaboy@gmail.com
+问题和建议：[提交 Issue](../../issues)。邮箱：zhaoweijia1997@gmail.com
 
 ## 许可证
 

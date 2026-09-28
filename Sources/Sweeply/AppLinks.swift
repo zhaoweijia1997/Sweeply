@@ -1,7 +1,7 @@
 import Foundation
 
 enum AppLinks {
-    static let contactEmail = "zhaoweijiaboy@gmail.com"
+    static let contactEmail = "zhaoweijia1997@gmail.com"
 
     /// Set once the GitHub repository exists, e.g. "https://github.com/<user>/Sweeply".
     /// The About window hides the GitHub and support links while this is nil.
