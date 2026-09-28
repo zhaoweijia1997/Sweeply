@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0 — unreleased
+## 0.3.0 — 2026-09-28
 
 - **Disk Health** tab: total data written and read, the drive's own wear estimate
   ("life used"), spare blocks, temperature, power-on time, power cycles, unsafe
