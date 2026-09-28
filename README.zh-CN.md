@@ -1,0 +1,92 @@
+# Sweeply
+
+[English](README.md) · **简体中文**
+
+一款小巧、老实的 macOS 垃圾清理工具。Sweeply 帮你找出可以放心删除的缓存、日志和开发工具残留，
+清楚告诉你它们是什么；在你确认之前，不会删除任何东西。
+
+<p align="center">
+  <img src="docs/screenshots/main-zh-Hans-light.png" width="720" alt="Sweeply 显示开发工具缓存及大小">
+</p>
+
+> **状态：早期预览版（0.1）。** 这一版只扫描并展示结果，移到废纸篓的功能在下一版加入。
+
+## 能找到什么
+
+**开发工具**
+- Xcode 编译数据（DerivedData）、Xcode 缓存、设备支持文件、归档
+- iOS 模拟器缓存
+- Gradle 缓存（Android Studio）
+- Homebrew 下载文件
+- pip、npm、Yarn、CocoaPods、Swift Package Manager 的缓存
+
+**App 缓存和日志**
+- `~/Library/Caches` 里各 App 的缓存（系统自己的缓存、正在运行的 App 的缓存会跳过）
+- `~/Library/Logs` 里的日志
+
+每一类都会说明是什么、删了会不会自动重建。展开能看到每个文件夹，并在访达中显示。
+
+## 安全第一
+
+- **你不点头就不删。** 选好要清理的之前，Sweeply 只扫描。
+- **一律移到废纸篓**，随时能放回原处。（0.2 版加入）
+- **只管 Mac 自己的磁盘。** 外接硬盘从不扫描、从不碰。
+- **系统缓存和正在运行的 App 一概不动。**
+- **完全离线。** 没有账号，没有统计，不联网。
+
+## 语言
+
+English、简体中文、繁體中文、日本語、Русский、Español、हिन्दी。在窗口里的地球图标菜单随时切换，
+不用重启。
+
+除中英文外的翻译欢迎母语者帮忙校对，见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+## 安装
+
+1. 在 [Releases](../../releases) 下载 `Sweeply-<版本号>.dmg`。
+2. 打开后把 **Sweeply** 拖进 **应用程序**。
+3. 第一次打开时，macOS 会提示“无法验证开发者”，因为 Sweeply 还没有经过苹果公证。
+   打开 **系统设置 → 隐私与安全性**，往下翻，点 **仍要打开**。只需要做一次。
+
+需要 macOS 14 Sonoma 或更新版本，Apple 芯片和 Intel 都支持。
+
+## 从源代码编译
+
+需要安装 Xcode（只装命令行工具不行，缺少 SwiftUI 的宏插件）。
+
+```bash
+./build.sh             # 生成 build.noindex/Sweeply.app（通用版）
+./build.sh --install   # 再装到“应用程序”
+./build.sh --dmg       # 再打一个发布用的 .dmg
+python3 tools/check_localizations.py   # 检查所有翻译
+```
+
+`Sweeply.app/Contents/MacOS/Sweeply --snapshot <文件夹>` 会用虚构的扫描结果，把窗口在每种语言、
+浅色和深色下各画一张图，方便检查排版和做截图。
+
+## 计划
+
+- [ ] 把选中的项目移到废纸篓（0.2）
+- [ ] 删除已不再安装的 iOS 版本对应的模拟器
+- [ ] 下载文件夹里的旧安装包
+- [ ] App 图标
+
+## 支持 Sweeply
+
+Sweeply 是免费的。如果它帮你腾出了空间，可以请开发者喝杯咖啡，见 [.github/donate](.github/donate)。
+
+<!-- 收款码：图片放进 .github/donate/ 之后取消注释
+<p>
+  <img src=".github/donate/wechat.png" width="180" alt="微信">
+  <img src=".github/donate/alipay.png" width="180" alt="支付宝">
+  <img src=".github/donate/paypay.png" width="180" alt="PayPay">
+</p>
+-->
+
+## 联系
+
+问题和建议：[提交 Issue](../../issues)。邮箱：zhaoweijiaboy@gmail.com
+
+## 许可证
+
+[MIT](LICENSE)

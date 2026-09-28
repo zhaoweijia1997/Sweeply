@@ -1,0 +1,3 @@
+# Shows a "Sponsor" button on the repository page.
+# Once the repository exists, point this at the README section, e.g.:
+# custom: ["https://github.com/<user>/Sweeply#support-sweeply"]
