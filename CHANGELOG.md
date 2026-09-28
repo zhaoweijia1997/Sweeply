@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.1 — 2026-09-28
+
+- Fix: Disk Health showed "isn't available" after the first read (for example after
+  pressing Refresh). The SMART plug-in wasn't released with `IODestroyPlugInInterface`,
+  so every later read in the same session failed. (0.3.0 put the blame on background
+  threads; that was wrong.)
+- A Refresh button on the "isn't available" screen, too.
+
 ## 0.3.0 — 2026-09-28
 
 - **Disk Health** tab: total data written and read, the drive's own wear estimate

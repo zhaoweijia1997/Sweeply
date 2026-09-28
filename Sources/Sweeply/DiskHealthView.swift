@@ -20,6 +20,7 @@ struct DiskHealthView: View {
                         .foregroundStyle(.secondary)
                     Text("Disk health isn't available for this Mac's built-in disk.")
                         .foregroundStyle(.secondary)
+                    Button("Refresh") { model.refresh() }
                 }
                 .multilineTextAlignment(.center)
                 .padding(40)

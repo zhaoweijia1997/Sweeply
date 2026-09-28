@@ -21,12 +21,18 @@ struct SweeplyApp: App {
 final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Sweeply.app/Contents/MacOS/Sweeply --disk-health: print what Disk Health reads, for bug reports.
+        // Reads twice through the same path as the tab, like opening it and pressing Refresh.
         if CommandLine.arguments.contains("--disk-health") {
-            // Same path as the Disk Health tab.
             MainActor.assumeIsolated {
                 let model = DiskHealthModel()
-                model.refresh()
-                if case let .loaded(health) = model.state { print(health) } else { print("Disk health unavailable") }
+                for attempt in 1...2 {
+                    model.refresh()
+                    if case let .loaded(health) = model.state {
+                        print("Read \(attempt): \(health)")
+                    } else {
+                        print("Read \(attempt): Disk health unavailable")
+                    }
+                }
             }
             exit(0)
         }

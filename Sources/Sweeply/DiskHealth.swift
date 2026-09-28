@@ -63,11 +63,7 @@ extension DiskHealth {
     }
 
     /// Reads the built-in NVMe SSD. Returns nil when there is none that reports SMART data
-    /// (for example older Macs with a SATA SSD).
-    ///
-    /// Main thread only: Apple's SMART plug-in fails when created on a background thread.
-    /// A read takes a few milliseconds.
-    @MainActor
+    /// (for example older Macs with a SATA SSD). A read takes a few milliseconds.
     static func readBuiltInDisk() -> DiskHealth? {
         var iterator: io_iterator_t = 0
         guard IOServiceGetMatchingServices(kIOMainPortDefault, IOServiceMatching("IONVMeBlockStorageDevice"), &iterator) == KERN_SUCCESS else {
@@ -112,7 +108,9 @@ extension DiskHealth {
         var score: Int32 = 0
         guard IOCreatePlugInInterfaceForService(service, smartUserClientType, cfPlugInInterface, &plugin, &score) == KERN_SUCCESS,
               let plugin, let pluginInterface = plugin.pointee else { return nil }
-        defer { _ = pluginInterface.pointee.Release(plugin) }
+        // IODestroyPlugInInterface, not Release: Release leaves the user client open,
+        // and every later IOCreatePlugInInterfaceForService in this process then fails.
+        defer { _ = IODestroyPlugInInterface(plugin) }
 
         var interface: LPVOID?
         guard pluginInterface.pointee.QueryInterface(plugin, CFUUIDGetUUIDBytes(smartInterface), &interface) == S_OK,
@@ -146,8 +144,8 @@ final class DiskHealthModel {
         self.state = state
     }
 
+    /// A read takes a few milliseconds, so it simply runs here on the main actor.
     func refresh() {
-        // Runs on the main actor on purpose; see readBuiltInDisk().
         state = DiskHealth.readBuiltInDisk().map(State.loaded) ?? .unavailable
     }
 }
