@@ -35,7 +35,6 @@
 "Not shown: %lld" = "No mostrados: %lld";
 "Selected: %@" = "Seleccionado: %@";
 "Found: %@" = "Encontrado: %@";
-"Cleaning isn't available yet — this version only scans." = "La limpieza aún no está disponible; esta versión solo analiza.";
 "Move to Trash" = "Mover a la papelera";
 "Version %@" = "Versión %@";
 "Sweeply is free and open source (MIT License)." = "Sweeply es gratuito y de código abierto (licencia MIT).";
@@ -44,3 +43,12 @@
 "If Sweeply saved you some space, you can buy the developer a coffee." = "Si Sweeply te ha ayudado a liberar espacio, puedes invitar a un café al desarrollador.";
 "Support Sweeply" = "Apoyar a Sweeply";
 "Done" = "Listo";
+"Move the selected items to the Trash?" = "¿Mover los elementos seleccionados a la papelera?";
+"Total: %@. You can put them back from the Trash until you empty it." = "Total: %@. Puedes recuperarlos de la papelera hasta que la vacíes.";
+"Cancel" = "Cancelar";
+"Moving to the Trash…" = "Moviendo a la papelera…";
+"Moved to the Trash: %@" = "Movido a la papelera: %@";
+"Empty the Trash to actually free up the space." = "Vacía la papelera para liberar el espacio de verdad.";
+"Show Trash" = "Mostrar papelera";
+"Not moved (in use or protected): %lld" = "No movidos (en uso o protegidos): %lld";
+"Selected items go to the Trash, so you can put them back." = "Lo seleccionado va a la papelera, así que puedes recuperarlo.";

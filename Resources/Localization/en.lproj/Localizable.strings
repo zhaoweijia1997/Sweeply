@@ -38,7 +38,6 @@
 "Not shown: %lld" = "Not shown: %lld";
 "Selected: %@" = "Selected: %@";
 "Found: %@" = "Found: %@";
-"Cleaning isn't available yet — this version only scans." = "Cleaning isn't available yet — this version only scans.";
 "Move to Trash" = "Move to Trash";
 "Version %@" = "Version %@";
 "Sweeply is free and open source (MIT License)." = "Sweeply is free and open source (MIT License).";
@@ -47,3 +46,12 @@
 "If Sweeply saved you some space, you can buy the developer a coffee." = "If Sweeply saved you some space, you can buy the developer a coffee.";
 "Support Sweeply" = "Support Sweeply";
 "Done" = "Done";
+"Move the selected items to the Trash?" = "Move the selected items to the Trash?";
+"Total: %@. You can put them back from the Trash until you empty it." = "Total: %@. You can put them back from the Trash until you empty it.";
+"Cancel" = "Cancel";
+"Moving to the Trash…" = "Moving to the Trash…";
+"Moved to the Trash: %@" = "Moved to the Trash: %@";
+"Empty the Trash to actually free up the space." = "Empty the Trash to actually free up the space.";
+"Show Trash" = "Show Trash";
+"Not moved (in use or protected): %lld" = "Not moved (in use or protected): %lld";
+"Selected items go to the Trash, so you can put them back." = "Selected items go to the Trash, so you can put them back.";

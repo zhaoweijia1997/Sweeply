@@ -35,7 +35,6 @@
 "Not shown: %lld" = "未显示：%lld";
 "Selected: %@" = "已选：%@";
 "Found: %@" = "共找到：%@";
-"Cleaning isn't available yet — this version only scans." = "清理功能还没做好，这一版只能扫描。";
 "Move to Trash" = "移到废纸篓";
 "Version %@" = "版本 %@";
 "Sweeply is free and open source (MIT License)." = "Sweeply 是免费的开源软件（MIT 许可证）。";
@@ -44,3 +43,12 @@
 "If Sweeply saved you some space, you can buy the developer a coffee." = "如果 Sweeply 帮你腾出了空间，可以请开发者喝杯咖啡。";
 "Support Sweeply" = "支持 Sweeply";
 "Done" = "完成";
+"Move the selected items to the Trash?" = "把选中的项目移到废纸篓？";
+"Total: %@. You can put them back from the Trash until you empty it." = "共 %@。清空废纸篓之前，都可以放回原处。";
+"Cancel" = "取消";
+"Moving to the Trash…" = "正在移到废纸篓…";
+"Moved to the Trash: %@" = "已移到废纸篓：%@";
+"Empty the Trash to actually free up the space." = "清空废纸篓后，空间才会真正腾出来。";
+"Show Trash" = "打开废纸篓";
+"Not moved (in use or protected): %lld" = "未能移走（正在使用或受保护）：%lld";
+"Selected items go to the Trash, so you can put them back." = "选中的项目会移到废纸篓，随时可以放回原处。";

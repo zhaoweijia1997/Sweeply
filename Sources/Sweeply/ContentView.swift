@@ -6,6 +6,7 @@ struct ContentView: View {
 
     @AppStorage(AppLanguage.storageKey) private var language: AppLanguage = .system
     @State private var showingAbout = false
+    @State private var confirmingClean = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -26,6 +27,14 @@ struct ContentView: View {
                 .padding(.vertical, 14)
         }
         .sheet(isPresented: $showingAbout) { AboutView() }
+        .confirmationDialog("Move the selected items to the Trash?", isPresented: $confirmingClean) {
+            Button("Move to Trash", role: .destructive) {
+                Task { await model.clean() }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Total: \(formatBytes(model.selectedBytes)). You can put them back from the Trash until you empty it.")
+        }
     }
 
     private var header: some View {
@@ -58,13 +67,16 @@ struct ContentView: View {
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
             .keyboardShortcut(.defaultAction)
-            .disabled(model.isScanning)
+            .disabled(model.isBusy)
         }
     }
 
     private var results: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
+                if let summary = model.lastCleanup {
+                    CleanupBanner(summary: summary)
+                }
                 ForEach(CleanCategory.Group.allCases) { group in
                     VStack(alignment: .leading, spacing: 8) {
                         Text(LocalizedStringKey(group.title))
@@ -76,13 +88,7 @@ struct ContentView: View {
                                 if index > 0 {
                                     Divider().padding(.leading, 44)
                                 }
-                                CategoryRow(
-                                    category: category,
-                                    result: model.results[category.id],
-                                    isScanning: model.scanning.contains(category.id),
-                                    isSelected: Binding(
-                                        get: { model.isSelected(category.id) },
-                                        set: { model.setSelected(category.id, $0) }))
+                                CategoryRow(category: category, model: model)
                             }
                         }
                         .background(Color.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 10))
@@ -104,14 +110,21 @@ struct ContentView: View {
                         .foregroundStyle(.secondary)
                 }
                 .monospacedDigit()
-                Text("Cleaning isn't available yet — this version only scans.")
+                Text("Selected items go to the Trash, so you can put them back.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
             Spacer()
-            Button("Move to Trash") {}
-                .controlSize(.large)
-                .disabled(true)
+            if model.isCleaning {
+                ProgressView().controlSize(.small)
+                Text("Moving to the Trash…")
+                    .foregroundStyle(.secondary)
+            }
+            Button("Move to Trash") {
+                confirmingClean = true
+            }
+            .controlSize(.large)
+            .disabled(model.isBusy || model.selectedBytes == 0)
         }
     }
 }
@@ -120,20 +133,21 @@ struct ContentView: View {
 
 private struct CategoryRow: View {
     let category: CleanCategory
-    let result: CategoryResult?
-    let isScanning: Bool
-    @Binding var isSelected: Bool
+    let model: ScanModel
 
     @State private var expanded = false
 
+    private var result: CategoryResult? { model.results[category.id] }
     private var hasItems: Bool { !(result?.items.isEmpty ?? true) }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .top, spacing: 12) {
-                Checkbox(isOn: $isSelected)
-                    .disabled(!hasItems)
-                    .padding(.top, 1)
+                Checkbox(state: model.state(of: category.id)) {
+                    model.setSelected(category.id, model.state(of: category.id) == .off)
+                }
+                .disabled(!hasItems || model.isCleaning)
+                .padding(.top, 1)
                 VStack(alignment: .leading, spacing: 3) {
                     Text(LocalizedStringKey(category.title))
                         .fontWeight(.medium)
@@ -166,7 +180,7 @@ private struct CategoryRow: View {
                 size
             }
             if expanded, let result {
-                ItemList(items: result.items)
+                ItemList(items: result.items, categoryID: category.id, model: model)
                     .padding(.leading, 32)
             }
         }
@@ -176,7 +190,7 @@ private struct CategoryRow: View {
 
     @ViewBuilder
     private var size: some View {
-        if isScanning {
+        if model.scanning.contains(category.id) {
             ProgressView().controlSize(.small)
         } else if let result {
             if hasItems {
@@ -193,12 +207,19 @@ private struct CategoryRow: View {
 
 private struct ItemList: View {
     let items: [FoundItem]
+    let categoryID: String
+    let model: ScanModel
     private let limit = 50
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             ForEach(items.prefix(limit)) { item in
                 HStack(spacing: 8) {
+                    let included = model.isIncluded(item, in: categoryID)
+                    Checkbox(state: included ? .on : .off, size: 14) {
+                        model.setIncluded(item, in: categoryID, !included)
+                    }
+                    .disabled(model.isCleaning)
                     Text(verbatim: item.name)
                         .lineLimit(1)
                         .truncationMode(.middle)
@@ -226,23 +247,61 @@ private struct ItemList: View {
     }
 }
 
+private struct CleanupBanner: View {
+    let summary: CleanupSummary
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: "checkmark.circle.fill")
+                .font(.system(size: 22))
+                .foregroundStyle(.green)
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Moved to the Trash: \(formatBytes(summary.movedBytes))")
+                    .fontWeight(.medium)
+                Text("Empty the Trash to actually free up the space.")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+                if !summary.notMoved.isEmpty {
+                    Text("Not moved (in use or protected): \(summary.notMoved.count)")
+                        .font(.callout)
+                        .foregroundStyle(.orange)
+                        .help(Text(verbatim: summary.notMoved.map(\.name).joined(separator: "\n")))
+                }
+            }
+            Spacer()
+            Button("Show Trash") {
+                NSWorkspace.shared.open(FileManager.default.homeDirectoryForCurrentUser.appending(path: ".Trash"))
+            }
+        }
+        .padding(14)
+        .background(Color.green.opacity(0.08), in: RoundedRectangle(cornerRadius: 10))
+        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.green.opacity(0.25)))
+    }
+}
+
 /// Drawn with SF Symbols rather than an AppKit checkbox, so it looks the same
 /// everywhere, including in `--snapshot` renders.
 private struct Checkbox: View {
-    @Binding var isOn: Bool
+    let state: ScanModel.CheckState
+    var size: CGFloat = 17
+    let action: () -> Void
+
     @Environment(\.isEnabled) private var isEnabled
 
     var body: some View {
-        let checked = isOn && isEnabled
-        Button {
-            isOn.toggle()
-        } label: {
-            Image(systemName: checked ? "checkmark.square.fill" : "square")
-                .font(.system(size: 17))
-                .foregroundStyle(checked ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
+        let symbol = switch state {
+        case .on: "checkmark.square.fill"
+        case .mixed: "minus.square.fill"
+        case .off: "square"
+        }
+        let active = state != .off && isEnabled
+        Button(action: action) {
+            Image(systemName: symbol)
+                .font(.system(size: size))
+                .foregroundStyle(active ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
         }
         .buttonStyle(.plain)
-        .accessibilityAddTraits(checked ? [.isSelected] : [])
+        .accessibilityAddTraits(state == .on ? [.isSelected] : [])
     }
 }
 

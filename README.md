@@ -10,8 +10,7 @@ anything until you choose to.
   <img src="docs/screenshots/main-en-light.png" width="720" alt="Sweeply showing developer caches and their sizes">
 </p>
 
-> **Status: early preview (0.1).** This version scans and shows what it found.
-> Moving items to the Trash comes in the next version.
+> **Status: early preview (0.2).** Scans, and moves what you pick to the Trash.
 
 ## What it finds
 
@@ -26,15 +25,17 @@ anything until you choose to.
 - Caches apps keep in `~/Library/Caches` (the system's own caches and those of running apps are skipped)
 - Log files in `~/Library/Logs`
 
-Each category explains what it is and whether it comes back, and you can expand it to
-see every folder and reveal it in Finder.
+Each category explains what it is and whether it comes back. Expand it to see every
+folder, reveal it in Finder, or untick the ones you want to keep.
 
 ## Safety first
 
 - **Nothing is deleted without you.** Sweeply only scans until you pick what to clean.
-- **Everything goes to the Trash**, so you can put it back. (Coming in 0.2.)
+- **Everything goes to the Trash**, so you can put it back until you empty it.
 - **Only your Mac's own disk.** External drives are never scanned or touched.
 - **System caches and running apps are left alone.**
+- **Checked twice.** Right before moving, each item is checked again: still in its
+  category's folder, still on this Mac's disk, and its app still not running.
 - **Works offline.** No accounts, no analytics, no network requests.
 
 ## Languages
@@ -72,7 +73,7 @@ screenshots.
 
 ## Roadmap
 
-- [ ] Move selected items to the Trash (0.2)
+- [x] Move selected items to the Trash (0.2)
 - [ ] Remove simulators for iOS versions you no longer have installed
 - [ ] Old installers in Downloads
 - [ ] App icon

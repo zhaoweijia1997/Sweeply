@@ -35,7 +35,6 @@
 "Not shown: %lld" = "非表示：%lld";
 "Selected: %@" = "選択済み：%@";
 "Found: %@" = "検出：%@";
-"Cleaning isn't available yet — this version only scans." = "クリーニング機能はまだ使えません。このバージョンはスキャンのみです。";
 "Move to Trash" = "ゴミ箱に入れる";
 "Version %@" = "バージョン %@";
 "Sweeply is free and open source (MIT License)." = "Sweeplyは無料のオープンソースソフトウェアです（MITライセンス）。";
@@ -44,3 +43,12 @@
 "If Sweeply saved you some space, you can buy the developer a coffee." = "Sweeplyで空き容量が増えたら、開発者にコーヒーを一杯おごってください。";
 "Support Sweeply" = "Sweeplyを応援する";
 "Done" = "完了";
+"Move the selected items to the Trash?" = "選択した項目をゴミ箱に入れますか？";
+"Total: %@. You can put them back from the Trash until you empty it." = "合計 %@。ゴミ箱を空にするまでは元に戻せます。";
+"Cancel" = "キャンセル";
+"Moving to the Trash…" = "ゴミ箱に移動中…";
+"Moved to the Trash: %@" = "ゴミ箱に移動しました：%@";
+"Empty the Trash to actually free up the space." = "ゴミ箱を空にすると、実際に空き容量が増えます。";
+"Show Trash" = "ゴミ箱を開く";
+"Not moved (in use or protected): %lld" = "移動できなかった項目（使用中または保護されています）：%lld";
+"Selected items go to the Trash, so you can put them back." = "選択した項目はゴミ箱に移動するので、あとから元に戻せます。";

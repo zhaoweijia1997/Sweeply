@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.0 — unreleased
+
+- **Move to Trash.** Tick categories — or single folders inside them — and move them to
+  the Trash after a confirmation. Nothing is ever deleted outright.
+- Each item is checked again right before it moves: still inside its category's folder,
+  on the same disk as your home folder, and (for app caches) its app still not running.
+  Anything that fails a check or can't be moved is left in place and reported.
+- A summary after cleaning, with a reminder to empty the Trash and a button to open it.
+
 ## 0.1.0 — unreleased
 
 First preview: scan only.

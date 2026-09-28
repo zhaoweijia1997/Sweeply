@@ -14,16 +14,18 @@ enum Snapshots {
     static func render(to folder: URL) {
         try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         for language in AppLanguage.allCases where language != .system {
+            for (name, model) in [("main", ScanModel.sample), ("cleaned", ScanModel.sampleAfterCleanup)] {
             for dark in [false, true] {
-                let view = ContentView(model: .sample)
+                let view = ContentView(model: model)
                     .environment(\.locale, language.locale)
                     .frame(width: size.width, height: size.height)
                     // A borderless off-screen window doesn't paint its background.
                     .background(Color(nsColor: .windowBackgroundColor))
-                let name = "main-\(language.rawValue)-\(dark ? "dark" : "light").png"
+                let file = "\(name)-\(language.rawValue)-\(dark ? "dark" : "light").png"
                 if let png = draw(view, dark: dark) {
-                    try? png.write(to: folder.appending(path: name))
+                    try? png.write(to: folder.appending(path: file))
                 }
+            }
             }
         }
     }
@@ -46,6 +48,16 @@ enum Snapshots {
 }
 
 extension ScanModel {
+    /// Made-up results right after a cleanup, with one item that couldn't move.
+    static var sampleAfterCleanup: ScanModel {
+        let model = sample
+        let summary = CleanupSummary(
+            moved: [FoundItem(url: URL(fileURLWithPath: "/Users/you/Library/Logs/old"), size: 8_860_000_000)],
+            notMoved: [FoundItem(url: URL(fileURLWithPath: "/Users/you/Library/Caches/com.example.locked"), size: 1)])
+        model.showCleanupForSnapshot(summary)
+        return model
+    }
+
     /// Made-up results for screenshots.
     static var sample: ScanModel {
         let gb: Int64 = 1_000_000_000

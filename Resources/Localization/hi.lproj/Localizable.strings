@@ -35,7 +35,6 @@
 "Not shown: %lld" = "नहीं दिखाए गए: %lld";
 "Selected: %@" = "चुना गया: %@";
 "Found: %@" = "मिला: %@";
-"Cleaning isn't available yet — this version only scans." = "सफ़ाई की सुविधा अभी उपलब्ध नहीं है — यह संस्करण सिर्फ़ स्कैन करता है।";
 "Move to Trash" = "ट्रैश में ले जाएँ";
 "Version %@" = "संस्करण %@";
 "Sweeply is free and open source (MIT License)." = "Sweeply मुफ़्त और ओपन सोर्स है (MIT लाइसेंस)।";
@@ -44,3 +43,12 @@
 "If Sweeply saved you some space, you can buy the developer a coffee." = "अगर Sweeply से आपकी जगह खाली हुई, तो आप डेवलपर को एक कॉफ़ी पिला सकते हैं।";
 "Support Sweeply" = "Sweeply का समर्थन करें";
 "Done" = "हो गया";
+"Move the selected items to the Trash?" = "चुने गए आइटम ट्रैश में ले जाएँ?";
+"Total: %@. You can put them back from the Trash until you empty it." = "कुल: %@। ट्रैश खाली करने तक आप इन्हें वापस ला सकते हैं।";
+"Cancel" = "रद्द करें";
+"Moving to the Trash…" = "ट्रैश में ले जाया जा रहा है…";
+"Moved to the Trash: %@" = "ट्रैश में ले जाया गया: %@";
+"Empty the Trash to actually free up the space." = "जगह सच में खाली करने के लिए ट्रैश खाली करें।";
+"Show Trash" = "ट्रैश दिखाएँ";
+"Not moved (in use or protected): %lld" = "नहीं ले जाए जा सके (इस्तेमाल में या सुरक्षित): %lld";
+"Selected items go to the Trash, so you can put them back." = "चुने गए आइटम ट्रैश में जाते हैं, इसलिए आप उन्हें वापस ला सकते हैं।";

@@ -35,7 +35,6 @@
 "Not shown: %lld" = "Не показано: %lld";
 "Selected: %@" = "Выбрано: %@";
 "Found: %@" = "Найдено: %@";
-"Cleaning isn't available yet — this version only scans." = "Очистка пока недоступна — эта версия только сканирует.";
 "Move to Trash" = "Переместить в Корзину";
 "Version %@" = "Версия %@";
 "Sweeply is free and open source (MIT License)." = "Sweeply — бесплатная программа с открытым исходным кодом (лицензия MIT).";
@@ -44,3 +43,12 @@
 "If Sweeply saved you some space, you can buy the developer a coffee." = "Если Sweeply помог освободить место, можете угостить разработчика кофе.";
 "Support Sweeply" = "Поддержать Sweeply";
 "Done" = "Готово";
+"Move the selected items to the Trash?" = "Переместить выбранное в Корзину?";
+"Total: %@. You can put them back from the Trash until you empty it." = "Всего: %@. Пока Корзина не очищена, всё можно вернуть.";
+"Cancel" = "Отменить";
+"Moving to the Trash…" = "Перемещение в Корзину…";
+"Moved to the Trash: %@" = "Перемещено в Корзину: %@";
+"Empty the Trash to actually free up the space." = "Очистите Корзину, чтобы действительно освободить место.";
+"Show Trash" = "Открыть Корзину";
+"Not moved (in use or protected): %lld" = "Не перемещено (используется или защищено): %lld";
+"Selected items go to the Trash, so you can put them back." = "Выбранное перемещается в Корзину, поэтому его можно вернуть.";
