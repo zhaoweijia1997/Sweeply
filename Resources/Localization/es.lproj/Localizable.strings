@@ -152,3 +152,5 @@
 "Settings…" = "Ajustes…";
 "Sweeply starts quietly in the menu bar, without opening its window." = "Sweeply se inicia en silencio en la barra de menús, sin abrir su ventana.";
 "Written today" = "Escrito hoy";
+"Brightness" = "Brillo";
+"Brightness can't be controlled for this display." = "No se puede ajustar el brillo de esta pantalla.";

@@ -12,7 +12,7 @@ anything until you choose to.
   <img src="docs/screenshots/main-en-light.png" width="720" alt="Sweeply showing developer caches and their sizes">
 </p>
 
-> **Status: early preview (0.5).** Cleans up, gives your Mac a quick checkup, and can stay in the menu bar.
+> **Status: early preview (0.6).** Cleans up, gives your Mac a quick checkup, controls display brightness, and can stay in the menu bar.
 
 ## What it finds
 
@@ -48,6 +48,7 @@ anything until you choose to.
 
 **Devices**
 - Displays, external drives, USB and Thunderbolt devices — names, sizes and speeds only.
+- A brightness slider for each display (Apple displays, and most other monitors over DDC).
 
 **Menu bar** (optional, in Settings)
 - Keep Sweeply running as a little broom in the menu bar, optionally with the CPU
@@ -68,7 +69,7 @@ folder, reveal it in Finder, or untick the ones you want to keep.
 - **No identifiers on screen.** No serial numbers, hardware IDs or accounts, so
   screenshots are safe to share.
 
-SSD health, temperatures and fan speeds come from undocumented macOS interfaces (the
+SSD health, temperatures, fan speeds and display brightness come from undocumented macOS interfaces (the
 same ones open-source system monitors use). If a macOS update changes them, those parts
 show "not available" instead.
 

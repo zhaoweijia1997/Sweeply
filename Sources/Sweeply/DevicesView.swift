@@ -2,6 +2,7 @@ import SwiftUI
 
 struct DevicesView: View {
     let model: PeripheralsModel
+    let brightness: BrightnessModel
 
     var body: some View {
         ScrollView {
@@ -9,10 +10,25 @@ struct DevicesView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     section("Displays", systemImage: "display", isEmpty: peripherals.displays.isEmpty) {
                         ForEach(peripherals.displays) { display in
-                            DeviceRow(
-                                name: display.name.isEmpty ? String(localized: "Display") : display.name,
-                                info: "\(display.pixelWidth) × \(display.pixelHeight) · \(display.refreshRate) Hz",
-                                badge: display.isBuiltIn ? "Built-in" : nil)
+                            VStack(alignment: .leading, spacing: 0) {
+                                DeviceRow(
+                                    name: display.name.isEmpty ? String(localized: "Display") : display.name,
+                                    info: "\(display.pixelWidth) × \(display.pixelHeight) · \(display.refreshRate) Hz",
+                                    badge: display.isBuiltIn ? "Built-in" : nil)
+                                if let control = brightness.display(display.id) {
+                                    Group {
+                                        if control.supported {
+                                            BrightnessSlider(model: brightness, display: control)
+                                        } else {
+                                            Text("Brightness can't be controlled for this display.")
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                    }
+                                    .padding(.horizontal, 12)
+                                    .padding(.bottom, 12)
+                                }
+                            }
                         }
                     }
                     section("External drives", systemImage: "externaldrive", isEmpty: peripherals.drives.isEmpty) {
@@ -41,7 +57,10 @@ struct DevicesView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .onAppear { model.start() }
+        .onAppear {
+            model.start()
+            brightness.refresh()
+        }
         .onDisappear { model.stop() }
     }
 

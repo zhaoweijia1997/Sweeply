@@ -25,7 +25,7 @@ enum Snapshots {
             for dark in [false, true] {
                 let view = ContentView(
                     model: model, system: .sample, disk: DiskHealthModel(state: .loaded(.sample), history: .sample, live: false),
-                    devices: PeripheralsModel(peripherals: .sample, live: false), tab: tab)
+                    devices: PeripheralsModel(peripherals: .sample, live: false), brightness: .sample, tab: tab)
                     .environment(\.expandAllItems, name == "items")
                     .environment(\.locale, language.locale)
                     .frame(width: size.width, height: height)
@@ -53,7 +53,8 @@ enum Snapshots {
                     try? png.write(to: folder.appending(path: "settings-" + suffix))
                 }
                 let panel = MenuBarPanel(
-                    system: .sample, disk: DiskHealthModel(state: .loaded(.sample), history: .sample, live: false))
+                    system: .sample, disk: DiskHealthModel(state: .loaded(.sample), history: .sample, live: false),
+                    brightness: .sample)
                     .environment(\.locale, language.locale)
                     .background(Color(nsColor: .windowBackgroundColor))
                 if let png = draw(panel, dark: dark, height: nil) {
@@ -96,6 +97,13 @@ enum Snapshots {
         guard let bitmap = hosting.bitmapImageRepForCachingDisplay(in: hosting.bounds) else { return nil }
         hosting.cacheDisplay(in: hosting.bounds, to: bitmap)
         return bitmap.representation(using: .png, properties: [:])
+    }
+}
+
+extension BrightnessModel {
+    /// Made-up display brightness for screenshots (id 1 matches Peripherals.sample's display).
+    static var sample: BrightnessModel {
+        BrightnessModel(displays: [Display(id: 1, name: "External Display", value: 0.72, supported: true)], live: false)
     }
 }
 

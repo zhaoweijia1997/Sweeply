@@ -90,6 +90,7 @@ final class AppModels {
     let disk = DiskHealthModel()
     let devices = PeripheralsModel()
     let menuBar = MenuBarModel()
+    let brightness = BrightnessModel()
 }
 
 /// Shows or hides the Dock icon: in background mode Sweeply lives in the menu bar

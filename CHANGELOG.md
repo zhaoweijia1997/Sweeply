@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.0 — 2026-09-28
+
+- **Display brightness**: a slider for each display on the Devices tab and in the menu
+  bar panel. Apple displays use the system's brightness control; other monitors are
+  controlled over DDC/CI (Apple silicon), like the dedicated monitor utilities do. While
+  dragging, only the latest value is sent, so slow monitors don't get flooded.
+
 ## 0.5.0 — 2026-09-28
 
 - **Background mode with a menu bar icon** (Settings, off by default): closing the

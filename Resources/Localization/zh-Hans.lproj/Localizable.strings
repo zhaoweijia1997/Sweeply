@@ -152,3 +152,5 @@
 "Settings…" = "设置…";
 "Sweeply starts quietly in the menu bar, without opening its window." = "Sweeply 会安静地在菜单栏启动，不弹出窗口。";
 "Written today" = "今天写入";
+"Brightness" = "亮度";
+"Brightness can't be controlled for this display." = "无法调节这台显示器的亮度。";

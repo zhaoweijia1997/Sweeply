@@ -152,3 +152,5 @@
 "Settings…" = "設定…";
 "Sweeply starts quietly in the menu bar, without opening its window." = "Sweeplyはウインドウを開かずに、メニューバーで静かに起動します。";
 "Written today" = "今日の書き込み";
+"Brightness" = "明るさ";
+"Brightness can't be controlled for this display." = "このディスプレイの明るさは調整できません。";

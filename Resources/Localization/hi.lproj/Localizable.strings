@@ -152,3 +152,5 @@
 "Settings…" = "सेटिंग्स…";
 "Sweeply starts quietly in the menu bar, without opening its window." = "Sweeply बिना विंडो खोले चुपचाप मेन्यू बार में शुरू होता है।";
 "Written today" = "आज लिखा गया";
+"Brightness" = "चमक";
+"Brightness can't be controlled for this display." = "इस डिस्प्ले की चमक नहीं बदली जा सकती।";

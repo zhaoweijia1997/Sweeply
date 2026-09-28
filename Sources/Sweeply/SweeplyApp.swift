@@ -14,7 +14,8 @@ struct SweeplyApp: App {
 
     var body: some Scene {
         Window("Sweeply", id: "main") {
-            ContentView(model: models.scan, system: models.system, disk: models.disk, devices: models.devices)
+            ContentView(model: models.scan, system: models.system, disk: models.disk, devices: models.devices,
+                        brightness: models.brightness)
                 .environment(\.locale, language.locale)
                 .frame(minWidth: 680, minHeight: 540)
                 .onAppear { DockIcon.windowOpened() }
@@ -29,7 +30,7 @@ struct SweeplyApp: App {
 
         // Only while "Run in the background with a menu bar icon" is on.
         MenuBarExtra(isInserted: commandLineRun ? .constant(false) : $backgroundMode) {
-            MenuBarPanel(system: models.system, disk: models.disk)
+            MenuBarPanel(system: models.system, disk: models.disk, brightness: models.brightness)
                 .environment(\.locale, language.locale)
         } label: {
             MenuBarLabel(model: models.menuBar)

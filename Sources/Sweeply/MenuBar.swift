@@ -110,6 +110,7 @@ enum MenuBarIcon {
 struct MenuBarPanel: View {
     let system: SystemModel
     let disk: DiskHealthModel
+    let brightness: BrightnessModel
 
     @Environment(\.openWindow) private var openWindow
     @Environment(\.locale) private var locale
@@ -142,6 +143,19 @@ struct MenuBarPanel: View {
                 }
             }
             .font(.callout)
+            let controllable = brightness.displays.filter(\.supported)
+            if !controllable.isEmpty {
+                Divider()
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Brightness").font(.callout).foregroundStyle(.secondary)
+                    ForEach(controllable) { display in
+                        if controllable.count > 1 {
+                            Text(verbatim: display.name).font(.caption)
+                        }
+                        BrightnessSlider(model: brightness, display: display)
+                    }
+                }
+            }
             Divider()
             VStack(spacing: 8) {
                 Button {
@@ -162,7 +176,10 @@ struct MenuBarPanel: View {
         }
         .padding(14)
         .frame(width: 320)
-        .onAppear { system.start() }
+        .onAppear {
+            system.start()
+            brightness.refresh()
+        }
         .onDisappear { system.stop() }
     }
 
