@@ -18,8 +18,15 @@ struct SettingsView: View {
                     Text("Icon only").tag(MenuBarShows.icon)
                     Text("CPU temperature").tag(MenuBarShows.temperature)
                     Text("CPU usage").tag(MenuBarShows.usage)
+                    Text("Junk size, instead of the icon").tag(MenuBarShows.junk)
                 }
                 .disabled(!backgroundMode)
+                if menuBarShows == .junk {
+                    Text("What Clean Up would move to the Trash with its default choices, measured every 30 minutes and after each cleanup.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
             Section {
                 Toggle("Open at login", isOn: Binding(

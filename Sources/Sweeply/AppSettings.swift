@@ -14,9 +14,10 @@ enum AppSettings {
     }
 }
 
-/// What the menu bar icon shows next to the little broom.
+/// What the menu bar shows: the little broom, with a reading next to it, or instead of it the
+/// amount of junk, as text only.
 enum MenuBarShows: String, CaseIterable, Identifiable {
-    case icon, temperature, usage
+    case icon, temperature, usage, junk
     var id: Self { self }
 }
 

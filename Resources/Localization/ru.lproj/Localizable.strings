@@ -181,3 +181,5 @@
 "Unmute" = "Включить звук";
 "Sound output" = "Вывод звука";
 "The Mac can't set this output's volume." = "Mac не может менять громкость этого устройства.";
+"Junk size, instead of the icon" = "Объём мусора вместо значка";
+"What Clean Up would move to the Trash with its default choices, measured every 30 minutes and after each cleanup." = "Сколько «Очистка» переместит в Корзину с выбором по умолчанию; пересчитывается каждые 30 минут и после каждой очистки.";

@@ -134,7 +134,11 @@ final class ScanModel {
         }
         excludedItems.subtract(moved)
         lastCleanup = summary
+        NotificationCenter.default.post(name: Self.didClean, object: nil)
     }
+
+    /// Posted after a cleanup, so the junk size in the menu bar is measured again.
+    static let didClean = Notification.Name("SweeplyDidClean")
 
     /// Only for `--snapshot` renders.
     func showCleanupForSnapshot(_ summary: CleanupSummary) {

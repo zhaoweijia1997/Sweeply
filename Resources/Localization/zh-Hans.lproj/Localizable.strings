@@ -181,3 +181,5 @@
 "Unmute" = "取消静音";
 "Sound output" = "声音输出";
 "The Mac can't set this output's volume." = "这个输出设备的音量无法由 Mac 调节。";
+"Junk size, instead of the icon" = "垃圾大小（代替图标）";
+"What Clean Up would move to the Trash with its default choices, measured every 30 minutes and after each cleanup." = "按“清理垃圾”默认勾选会移到废纸篓的总量，每 30 分钟和每次清理后重新计算。";

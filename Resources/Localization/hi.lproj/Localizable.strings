@@ -181,3 +181,5 @@
 "Unmute" = "अनम्यूट करें";
 "Sound output" = "साउंड आउटपुट";
 "The Mac can't set this output's volume." = "इस आउटपुट का वॉल्यूम Mac से नहीं बदला जा सकता।";
+"Junk size, instead of the icon" = "आइकन की जगह जंक का आकार";
+"What Clean Up would move to the Trash with its default choices, measured every 30 minutes and after each cleanup." = "डिफ़ॉल्ट चुनाव के साथ “सफ़ाई” जितना ट्रैश में ले जाएगी; हर 30 मिनट में और हर सफ़ाई के बाद फिर से मापा जाता है।";

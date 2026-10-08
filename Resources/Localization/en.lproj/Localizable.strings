@@ -184,3 +184,5 @@
 "Unmute" = "Unmute";
 "Sound output" = "Sound output";
 "The Mac can't set this output's volume." = "The Mac can't set this output's volume.";
+"Junk size, instead of the icon" = "Junk size, instead of the icon";
+"What Clean Up would move to the Trash with its default choices, measured every 30 minutes and after each cleanup." = "What Clean Up would move to the Trash with its default choices, measured every 30 minutes and after each cleanup.";

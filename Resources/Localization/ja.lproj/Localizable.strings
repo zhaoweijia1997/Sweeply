@@ -181,3 +181,5 @@
 "Unmute" = "消音を解除";
 "Sound output" = "サウンド出力";
 "The Mac can't set this output's volume." = "この出力の音量は Mac から変更できません。";
+"Junk size, instead of the icon" = "ジャンクのサイズ（アイコンの代わりに）";
+"What Clean Up would move to the Trash with its default choices, measured every 30 minutes and after each cleanup." = "「クリーンアップ」が既定の選択でゴミ箱に移す量。30 分ごとと、クリーンアップのたびに計り直します。";

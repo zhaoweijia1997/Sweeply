@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.1 — 2026-10-09
+
+- **Junk size in the menu bar.** A new choice in Settings: instead of the broom, the menu bar
+  can show how much there is to clean — what Clean Up would move to the Trash with its
+  default choices. It is measured every 30 minutes and after each cleanup, and only reads.
+- **Fixed: the broom did not appear next to the temperature or the usage.** The icon was
+  wrapped in a text to sit beside the number, and a custom image put in a text is dropped
+  from a menu bar label, leaving only the number. The icon and the reading are now drawn
+  into one image.
+
 ## 0.9.0 — 2026-10-09
 
 - **Volume**: a slider for the Mac's current sound output (speakers, headphones, a USB or
