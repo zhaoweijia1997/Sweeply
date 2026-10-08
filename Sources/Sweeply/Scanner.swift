@@ -9,6 +9,8 @@ struct FoundItem: Identifiable, Hashable, Sendable {
     var label: String? = nil
     /// When it was downloaded or last changed, shown for installers.
     var date: Date? = nil
+    /// What a deleted app left behind (the "leftovers" category only).
+    var leftover: Leftover? = nil
 
     var id: String { url.path }
     var name: String { label ?? url.lastPathComponent }
@@ -54,7 +56,12 @@ struct CategoryResult: Sendable {
 
 /// Finds junk and measures it. Read-only: nothing here deletes or moves anything.
 enum Scanner {
-    static func scan(_ category: CleanCategory, home: URL, runningApps: Set<String>) -> CategoryResult {
+    /// `leftoverPlaces`: where to look for leftovers instead of the real folders (tests).
+    static func scan(_ category: CleanCategory, home: URL, runningApps: Set<String>,
+                     leftoverPlaces: LeftoverScanner.Places? = nil) -> CategoryResult {
+        if case .leftovers = category.source {
+            return LeftoverScanner.scan(leftoverPlaces ?? .standard(home: home))
+        }
         var result = CategoryResult()
         for url in category.candidates(home: home) {
             var item = FoundItem(url: url, size: 0)

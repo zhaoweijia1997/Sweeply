@@ -4,15 +4,15 @@
 
 **English** · [简体中文](README.zh-CN.md)
 
-A small, honest junk cleaner for macOS. Sweeply finds caches, logs and developer
-leftovers you can safely remove, shows you exactly what they are, and never deletes
+A small, honest junk cleaner for macOS. Sweeply finds caches, logs, developer leftovers
+and what deleted apps left behind, shows you exactly what they are, and never deletes
 anything until you choose to.
 
 <p align="center">
   <img src="docs/screenshots/main-en-light.png" width="720" alt="Sweeply showing developer caches and their sizes">
 </p>
 
-> **Status: early preview (0.6).** Cleans up, gives your Mac a quick checkup, controls display brightness, and can stay in the menu bar.
+> **Status: early preview (0.7).** Cleans up, removes what deleted apps left behind, gives your Mac a quick checkup, controls display brightness, and can stay in the menu bar.
 
 ## What it finds
 
@@ -28,6 +28,18 @@ anything until you choose to.
 - Caches apps keep in `~/Library/Caches` (the system's own caches and those of running apps are skipped)
 - Log files in `~/Library/Logs`
 - Installers (.dmg, .pkg, .xip) in Downloads (not selected by default)
+
+**Left behind by deleted apps**
+- Login items and background services (launch agents and daemons) whose app is gone. What
+  they start no longer exists, yet macOS keeps trying, sometimes every few seconds for weeks.
+  Sweeply shows the app they came with and how many times macOS has tried.
+- Audio drivers from the same developer, when none of its apps is installed any more (not
+  selected by default).
+- Removing those in system folders asks for your password, once, in macOS's own dialog.
+
+<p align="center">
+  <img src="docs/screenshots/leftovers-en-light.png" width="620" alt="Leftovers of deleted apps: a background service macOS tried to start 86,412 times, a VPN login item, a sync app's login item and an audio driver">
+</p>
 
 **System**
 - CPU usage per core, memory and memory pressure, startup disk space, uptime
@@ -63,6 +75,9 @@ folder, reveal it in Finder, or untick the ones you want to keep.
 - **Everything goes to the Trash**, so you can put it back until you empty it.
 - **Only your Mac's own disk.** External drives are never scanned or touched.
 - **System caches and running apps are left alone.**
+- **Only what's certainly broken.** A background item counts as left over only when the
+  program it starts is gone: not when macOS privacy protection keeps Sweeply from looking,
+  not on an unplugged drive, and never Apple's own.
 - **Checked twice.** Right before moving, each item is checked again: still in its
   category's folder, still on this Mac's disk, and its app still not running.
 - **Works offline.** No accounts, no analytics, no network requests.
@@ -112,7 +127,8 @@ screenshots.
 
 - [x] Move selected items to the Trash (0.2)
 - [ ] Remove simulators for iOS versions you no longer have installed
-- [ ] Old installers in Downloads
+- [x] Old installers in Downloads (0.5)
+- [x] Leftovers of deleted apps: background items and audio drivers (0.7)
 - [x] App icon
 
 ## Support Sweeply

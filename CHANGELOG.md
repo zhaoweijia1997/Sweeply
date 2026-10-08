@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.7.0 — 2026-10-08
+
+- **Left behind by deleted apps** (new on the Clean Up tab): login items and background
+  services (launch agents and daemons in `~/Library/LaunchAgents`, `/Library/LaunchAgents`
+  and `/Library/LaunchDaemons`) whose program no longer exists, with the app they came with
+  and how many times macOS has tried to start them. A deleted app's service can be restarted
+  every few seconds for weeks. Audio drivers from the same developer are listed too, unticked,
+  when none of its apps is installed any more.
+- An item only counts when what it starts is certainly gone: not when macOS privacy
+  protection keeps Sweeply from looking, not on an external drive, and never Apple's own.
+  Each one is checked again right before it's removed.
+- Removing stops each item, then moves it to the Trash. Those in system folders ask for your
+  password once, in macOS's own dialog; cancelling leaves them as they were.
+- `--leftovers` lists what the check finds on this Mac, read-only.
+
 ## 0.6.0 — 2026-09-28
 
 - **Display brightness**: a slider for each display on the Devices tab and in the menu

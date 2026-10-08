@@ -4,6 +4,8 @@ struct CleanupSummary: Sendable {
     var moved: [FoundItem] = []
     /// Items that were left in place: they failed a safety check or couldn't be moved.
     var notMoved: [FoundItem] = []
+    /// The password prompt for leftovers in system folders was cancelled.
+    var passwordCancelled = false
 
     var movedBytes: Int64 { moved.reduce(0) { $0 + $1.size } }
 }
@@ -65,6 +67,9 @@ enum Cleaner {
         case let .installers(folder, extensions):
             guard extensions.contains(item.pathExtension.lowercased()) else { return false }
             allowedFolders = [home.appending(path: folder).resolvingSymlinksInPath().path]
+        case .leftovers:
+            // LeftoverRemover checks and removes these.
+            return false
         }
         guard allowedFolders.contains(parent) else { return false }
 

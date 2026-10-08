@@ -75,7 +75,12 @@ struct ContentView: View {
             }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("Total: \(formatBytes(model.selectedBytes)). You can put them back from the Trash until you empty it.")
+            let total = Text("Total: \(formatBytes(model.selectedBytes)). You can put them back from the Trash until you empty it.")
+            if model.selection.contains(where: { $0.item.leftover?.needsPassword == true }) {
+                total + Text(verbatim: " ") + Text("Background items in system folders need your password.")
+            } else {
+                total
+            }
         }
     }
 
@@ -171,7 +176,7 @@ struct ContentView: View {
                 confirmingClean = true
             }
             .controlSize(.large)
-            .disabled(model.isBusy || model.selectedBytes == 0)
+            .disabled(model.isBusy || model.selection.isEmpty)
         }
     }
 }
@@ -260,7 +265,11 @@ private struct CategoryRow: View {
         if model.scanning.contains(category.id) {
             ProgressView().controlSize(.small)
         } else if let result {
-            if hasItems {
+            if hasItems, case .leftovers = category.source {
+                Text("\(result.items.count) found")
+                    .fontWeight(.medium)
+                    .monospacedDigit()
+            } else if hasItems {
                 Text(formatBytes(result.total))
                     .fontWeight(.medium)
                     .monospacedDigit()
@@ -283,6 +292,9 @@ private struct ItemList: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             ForEach(items.prefix(limit)) { item in
+                if let leftover = item.leftover {
+                    LeftoverRow(item: item, leftover: leftover, categoryID: categoryID, model: model)
+                } else {
                 HStack(spacing: 8) {
                     let included = model.isIncluded(item, in: categoryID)
                     Checkbox(state: included ? .on : .off, size: 14) {
@@ -312,6 +324,7 @@ private struct ItemList: View {
                     .help(Text("Show in Finder"))
                 }
                 .font(.callout)
+                }
             }
             if items.count > limit {
                 Text("Not shown: \(items.count - limit)")
@@ -319,6 +332,59 @@ private struct ItemList: View {
                     .foregroundStyle(.secondary)
             }
         }
+    }
+}
+
+/// A leftover: the app it came with, what kind of item it is and how often macOS has tried to
+/// start it. The tooltip has the file and the missing program.
+private struct LeftoverRow: View {
+    let item: FoundItem
+    let leftover: Leftover
+    let categoryID: String
+    let model: ScanModel
+
+    var body: some View {
+        HStack(spacing: 8) {
+            let included = model.isIncluded(item, in: categoryID)
+            Checkbox(state: included ? .on : .off, size: 14) {
+                model.setIncluded(item, in: categoryID, !included)
+            }
+            .disabled(model.isCleaning)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(verbatim: leftover.kind == .audioDriver ? "\(item.name) · \(leftover.appName)" : leftover.appName)
+                    .lineLimit(1)
+                    .truncationMode(.middle)
+                detail
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
+            .help(Text(verbatim: [item.url.path, leftover.missingProgram.map { "→ \($0)" }].compactMap { $0 }.joined(separator: "\n")))
+            Spacer(minLength: 8)
+            if leftover.needsPassword {
+                Image(systemName: "lock")
+                    .foregroundStyle(.secondary)
+                    .help(Text("Needs your password to remove"))
+            }
+            Button {
+                NSWorkspace.shared.activateFileViewerSelecting([item.url])
+            } label: {
+                Image(systemName: "magnifyingglass")
+            }
+            .buttonStyle(.borderless)
+            .help(Text("Show in Finder"))
+        }
+        .font(.callout)
+    }
+
+    private var detail: Text {
+        let kind = switch leftover.kind {
+        case .loginItem: Text("Starts when you log in")
+        case .loginItemForAllUsers: Text("Starts when anyone logs in")
+        case .backgroundService: Text("Background service")
+        case .audioDriver: Text("Audio driver from the same developer")
+        }
+        guard let runs = leftover.runs, runs > 1 else { return kind }
+        return kind + Text(verbatim: " · ") + Text("Tried to start \(runs.formatted()) times")
     }
 }
 
@@ -336,6 +402,21 @@ private struct CleanupBanner: View {
                 Text("Empty the Trash to actually free up the space.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
+                let leftovers = summary.moved.filter { $0.leftover != nil }
+                if !leftovers.isEmpty {
+                    Text("Background items removed: \(leftovers.count)")
+                        .font(.callout)
+                    if leftovers.contains(where: { $0.leftover?.kind == .audioDriver }) {
+                        Text("Removed audio drivers are fully gone after you restart the Mac.")
+                            .font(.callout)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                if summary.passwordCancelled {
+                    Text("Items in system folders were left alone because the password wasn't entered.")
+                        .font(.callout)
+                        .foregroundStyle(.orange)
+                }
                 if !summary.notMoved.isEmpty {
                     Text("Not moved (in use or protected): \(summary.notMoved.count)")
                         .font(.callout)

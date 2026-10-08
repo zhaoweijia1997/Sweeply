@@ -17,8 +17,9 @@ final class ScanModel {
     private(set) var selected: Set<String> = Set(CleanCategory.all.filter(\.selectedByDefault).map(\.id))
     private(set) var excludedItems: Set<String> = []
 
-    init(results: [String: CategoryResult] = [:]) {
+    init(results: [String: CategoryResult] = [:], excludedItems: Set<String> = []) {
         self.results = results
+        self.excludedItems = excludedItems
     }
 
     var hasStarted: Bool { !results.isEmpty || !scanning.isEmpty }
@@ -74,7 +75,8 @@ final class ScanModel {
     /// Scans every category in parallel; each row fills in as its category finishes.
     func scan(
         home: URL = FileManager.default.homeDirectoryForCurrentUser,
-        runningApps: Set<String>? = nil
+        runningApps: Set<String>? = nil,
+        leftoverPlaces: LeftoverScanner.Places? = nil
     ) {
         guard !isBusy else { return }
         let runningApps = runningApps ?? Self.runningApps()
@@ -85,8 +87,10 @@ final class ScanModel {
         for category in CleanCategory.all {
             Task {
                 let result = await Task.detached(priority: .userInitiated) {
-                    Scanner.scan(category, home: home, runningApps: runningApps)
+                    Scanner.scan(category, home: home, runningApps: runningApps, leftoverPlaces: leftoverPlaces)
                 }.value
+                // A driver is a guess (same developer as a leftover); the user ticks it if sure.
+                excludedItems.formUnion(result.items.filter { $0.leftover?.kind == .audioDriver }.map(\.id))
                 results[category.id] = result
                 scanning.remove(category.id)
             }
@@ -95,11 +99,15 @@ final class ScanModel {
 
     // MARK: Clean
 
-    /// Moves the selection to the Trash, then drops what moved from the results.
+    /// Moves the selection to the Trash, then drops what moved from the results. Leftovers of
+    /// deleted apps are stopped first; those in system folders ask for a password, once.
     func clean(
         home: URL = FileManager.default.homeDirectoryForCurrentUser,
         runningApps: Set<String>? = nil,
-        moveToTrash: @escaping Cleaner.MoveToTrash = Cleaner.systemTrash
+        moveToTrash: @escaping Cleaner.MoveToTrash = Cleaner.systemTrash,
+        places: LeftoverScanner.Places? = nil,
+        bootout: @escaping LeftoverRemover.Bootout = LeftoverRemover.launchctlBootout,
+        runAsAdmin: @escaping LeftoverRemover.RunAsAdmin = LeftoverRemover.administrator
     ) async {
         guard !isBusy, !selection.isEmpty else { return }
         // Checked again now: an app may have started since the scan.
@@ -107,10 +115,18 @@ final class ScanModel {
         isCleaning = true
         defer { isCleaning = false }
 
-        let selection = self.selection
-        let summary = await Task.detached(priority: .userInitiated) {
+        let selection = self.selection.filter { $0.item.leftover == nil }
+        let leftovers = self.selection.map(\.item).filter { $0.leftover != nil }
+        var summary = await Task.detached(priority: .userInitiated) {
             Cleaner.clean(selection, home: home, runningApps: runningApps, moveToTrash: moveToTrash)
         }.value
+        if !leftovers.isEmpty {
+            let removal = LeftoverRemover.remove(
+                leftovers, places: places ?? .standard(home: home), bootout: bootout, runAsAdmin: runAsAdmin, moveToTrash: moveToTrash)
+            summary.moved += removal.removed
+            summary.notMoved += removal.notRemoved
+            summary.passwordCancelled = removal.passwordCancelled
+        }
 
         let moved = Set(summary.moved.map(\.id))
         for id in results.keys {

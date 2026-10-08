@@ -8,9 +8,9 @@ struct SweeplyApp: App {
     @AppStorage(AppLanguage.storageKey) private var language: AppLanguage = .system
     @AppStorage(AppSettings.backgroundModeKey) private var backgroundMode = false
     private let models = AppModels.shared
-    /// --snapshot, --report and --disk-health runs mustn't create a menu bar item: it would
-    /// write its state back into the user's real preferences.
-    private let commandLineRun = ["--snapshot", "--report", "--disk-health"].contains { CommandLine.arguments.contains($0) }
+    /// --snapshot, --report, --disk-health and --leftovers runs mustn't create a menu bar item:
+    /// it would write its state back into the user's real preferences.
+    private let commandLineRun = ["--snapshot", "--report", "--disk-health", "--leftovers"].contains { CommandLine.arguments.contains($0) }
 
     var body: some Scene {
         Window("Sweeply", id: "main") {
@@ -79,6 +79,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                       Login item: \(LoginItem.state) (system status \(SMAppService.mainApp.status.rawValue)), background mode \(AppSettings.backgroundMode ? "on" : "off")
                     """)
                 }
+            }
+            exit(0)
+        }
+        // Sweeply.app/Contents/MacOS/Sweeply --leftovers: what the leftovers check finds on this Mac.
+        // Read-only. Lists app names and file paths, so it's for checking, not for bug reports.
+        if CommandLine.arguments.contains("--leftovers") {
+            let home = FileManager.default.homeDirectoryForCurrentUser
+            let found = LeftoverScanner.scan(.standard(home: home)).items
+            print("Leftovers of deleted apps: \(found.count) (read-only, nothing removed)")
+            for item in found {
+                guard let leftover = item.leftover else { continue }
+                let runs = leftover.kind == .audioDriver ? "" : leftover.runs.map { " · started \($0) times" } ?? " · not loaded"
+                print("  \(leftover.kind) · \(leftover.appName) · \(leftover.identifier)\(runs)\(leftover.needsPassword ? " · needs password" : "")")
+                print("    \(item.url.path)\(leftover.missingProgram.map { " → \($0) (gone)" } ?? "")")
             }
             exit(0)
         }

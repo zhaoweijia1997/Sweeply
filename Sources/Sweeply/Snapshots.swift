@@ -171,7 +171,11 @@ extension ScanModel {
     static var sampleAfterCleanup: ScanModel {
         let model = sample
         let summary = CleanupSummary(
-            moved: [FoundItem(url: URL(fileURLWithPath: "/Users/you/Library/Logs/old"), size: 8_860_000_000)],
+            moved: [
+                FoundItem(url: URL(fileURLWithPath: "/Users/you/Library/Logs/old"), size: 8_860_000_000),
+                FoundItem(url: URL(fileURLWithPath: "/Library/LaunchDaemons/com.example.remote.service.plist"), size: 4_096,
+                          leftover: Leftover(kind: .backgroundService, identifier: "com.example.remote.service", appName: "Example Remote", needsPassword: true)),
+            ],
             notMoved: [FoundItem(url: URL(fileURLWithPath: "/Users/you/Library/Caches/com.example.locked"), size: 1)])
         model.showCleanupForSnapshot(summary)
         return model
@@ -207,6 +211,25 @@ extension ScanModel {
                 FoundItem(url: URL(fileURLWithPath: "/Users/you/Downloads/SomeApp-2.1.dmg"), size: 310 * mb, date: Date().addingTimeInterval(-40 * 86_400)),
                 FoundItem(url: URL(fileURLWithPath: "/Users/you/Downloads/Driver.pkg"), size: 45 * mb, date: Date().addingTimeInterval(-3 * 86_400)),
             ]),
+            "leftovers": sampleLeftovers,
+        ], excludedItems: Set(sampleLeftovers.items.filter { $0.leftover?.kind == .audioDriver }.map(\.id)))
+    }
+
+    /// Made-up apps: a remote desktop tool's service that macOS keeps restarting, a VPN's
+    /// login item, a sync app's own login item and the remote tool's audio driver.
+    static var sampleLeftovers: CategoryResult {
+        CategoryResult(items: [
+            FoundItem(url: URL(fileURLWithPath: "/Library/LaunchDaemons/com.example.remote.service.plist"), size: 4_096,
+                      leftover: Leftover(kind: .backgroundService, identifier: "com.example.remote.service", appName: "Example Remote",
+                                         missingProgram: "/Applications/Example Remote.app/Contents/MacOS/service", runs: 86_412, needsPassword: true)),
+            FoundItem(url: URL(fileURLWithPath: "/Library/LaunchAgents/com.example.vpn.agent.plist"), size: 4_096,
+                      leftover: Leftover(kind: .loginItemForAllUsers, identifier: "com.example.vpn.agent", appName: "Old VPN",
+                                         missingProgram: "/Applications/Old VPN.app/Contents/MacOS/agent", runs: 1, needsPassword: true)),
+            FoundItem(url: URL(fileURLWithPath: "/Users/you/Library/LaunchAgents/com.example.photosync.plist"), size: 4_096,
+                      leftover: Leftover(kind: .loginItem, identifier: "com.example.photosync", appName: "Photo Sync",
+                                         missingProgram: "/Applications/Photo Sync.app/Contents/MacOS/Photo Sync", needsPassword: false)),
+            FoundItem(url: URL(fileURLWithPath: "/Library/Audio/Plug-Ins/HAL/ExampleRemoteSound.driver"), size: 1_200_000, label: "ExampleRemoteSound",
+                      leftover: Leftover(kind: .audioDriver, identifier: "com.example.ExampleRemoteSound", appName: "Example Remote", needsPassword: true)),
         ])
     }
 }

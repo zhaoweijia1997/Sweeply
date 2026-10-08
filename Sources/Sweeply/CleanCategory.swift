@@ -8,6 +8,7 @@ struct CleanCategory: Identifiable, Sendable {
     enum Group: String, CaseIterable, Identifiable, Sendable {
         case developer
         case appData
+        case leftovers
 
         var id: Self { self }
 
@@ -15,6 +16,7 @@ struct CleanCategory: Identifiable, Sendable {
             switch self {
             case .developer: "Developer tools"
             case .appData: "App caches & logs"
+            case .leftovers: "Left behind by deleted apps"
             }
         }
     }
@@ -31,6 +33,9 @@ struct CleanCategory: Identifiable, Sendable {
         case simulatorDevices
         /// Installer files directly in ~/Downloads.
         case installers(in: String, extensions: Set<String>)
+        /// Login items, background services and audio drivers of deleted apps
+        /// (`LeftoverScanner`), including ones in system folders.
+        case leftovers
     }
 
     let id: String
@@ -126,6 +131,12 @@ extension CleanCategory {
             detail: "Installer files (.dmg, .pkg, .xip) in your Downloads folder. Once the app is installed you usually don't need them. macOS may ask whether Sweeply can see your Downloads folder.",
             selectedByDefault: false,
             source: .installers(in: "Downloads", extensions: ["dmg", "pkg", "mpkg", "xip"])),
+        CleanCategory(
+            id: "leftovers", group: .leftovers,
+            title: "Background items and drivers",
+            detail: "Login items, background services and audio drivers that apps you've deleted left behind. What they start is gone, so they can't do anything, but macOS keeps trying. Removing those in system folders asks for your password. Audio drivers are left unticked: tick them only if you no longer use that device.",
+            selectedByDefault: true,
+            source: .leftovers),
     ]
 
     /// Folders inside ~/Library/Caches that a more specific category owns,
@@ -160,6 +171,9 @@ extension CleanCategory {
             return Self.children(of: home.appending(path: folder)).filter {
                 extensions.contains($0.pathExtension.lowercased())
             }
+        case .leftovers:
+            // Found and checked by LeftoverScanner.
+            return []
         }
     }
 
