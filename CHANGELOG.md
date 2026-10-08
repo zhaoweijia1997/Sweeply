@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.8.0 — 2026-10-08
+
+- **Used space over time** on the Disk Health tab: how much of the startup disk was in use at
+  the end of each of the last 30 days and how much that changed, to spot something that keeps
+  eating space. Sweeply notes it together with the writes: whenever it's open, at most once an
+  hour (all day in the background with the menu bar icon). macOS keeps no such history, so it
+  starts the first time Sweeply notes it, and it's kept across updates in
+  ~/Library/Application Support/Sweeply. Shown even when the drive's health can't be read.
+
 ## 0.7.0 — 2026-10-08
 
 - **Left behind by deleted apps** (new on the Clean Up tab): login items and background

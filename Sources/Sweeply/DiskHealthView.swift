@@ -15,16 +15,20 @@ struct DiskHealthView: View {
                     Text("Reading disk health…").foregroundStyle(.secondary)
                 }
             case .unavailable:
-                VStack(spacing: 12) {
-                    Image(systemName: "internaldrive")
-                        .font(.system(size: 44))
-                        .foregroundStyle(.secondary)
-                    Text("Disk health isn't available for this Mac's built-in disk.")
-                        .foregroundStyle(.secondary)
-                    Button("Refresh") { model.refresh() }
+                ScrollView {
+                    VStack(spacing: 12) {
+                        Image(systemName: "internaldrive")
+                            .font(.system(size: 44))
+                            .foregroundStyle(.secondary)
+                        Text("Disk health isn't available for this Mac's built-in disk.")
+                            .foregroundStyle(.secondary)
+                        Button("Refresh") { model.refresh() }
+                    }
+                    .multilineTextAlignment(.center)
+                    .padding(40)
+                    // The used space doesn't depend on the drive's health readings.
+                    usedSpace.padding([.horizontal, .bottom], 20)
                 }
-                .multilineTextAlignment(.center)
-                .padding(40)
             case let .loaded(health):
                 ScrollView {
                     details(health).padding(20)
@@ -83,6 +87,7 @@ struct DiskHealthView: View {
             .fixedSize(horizontal: false, vertical: true)
 
             writesPerDay
+            usedSpace
 
             Grid(horizontalSpacing: 14, verticalSpacing: 14) {
                 GridRow {
@@ -154,6 +159,68 @@ struct DiskHealthView: View {
                     .foregroundStyle(.secondary)
             }
         }
+    }
+
+    /// Used space at the end of each day for 30 days, and how much it changed: a line that
+    /// keeps climbing means something is eating space. The scale starts near the lowest day,
+    /// not at zero, so a few gigabytes show.
+    private var usedSpace: some View {
+        let history = model.space
+        let days = history.days(30)
+        let change = history.change(30)
+        let since = history.firstDate?.formatted(.dateTime.year().month().day().locale(locale))
+        let today = Calendar.current.startOfDay(for: Date())
+        let start = Calendar.current.date(byAdding: .day, value: -29, to: today)!
+        let low = Double(days.map(\.used).min() ?? 0)
+        let high = Double(days.map(\.used).max() ?? 0)
+        let margin = max((high - low) / 4, 1_000_000_000)
+        return Card {
+            HStack {
+                Text("Used space").foregroundStyle(.secondary)
+                Spacer()
+                if let change {
+                    Text("Change: \(signedBytes(change))").fontWeight(.medium)
+                }
+            }
+            if days.count < 2 {
+                Text("Sweeply notes the used space whenever it's open. Check back tomorrow to see how it changes.")
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else {
+                Chart(days) { day in
+                    AreaMark(x: .value("Day", day.date, unit: .day),
+                             yStart: .value("Used", low - margin), yEnd: .value("Used", Double(day.used)))
+                        .foregroundStyle(Color.accentColor.opacity(0.18).gradient)
+                    LineMark(x: .value("Day", day.date, unit: .day), y: .value("Used", Double(day.used)))
+                        .foregroundStyle(Color.accentColor)
+                }
+                .chartXScale(domain: start...today)
+                .chartYScale(domain: (low - margin)...(high + margin))
+                .chartYAxis {
+                    AxisMarks { value in
+                        AxisGridLine()
+                        AxisValueLabel {
+                            if let bytes = value.as(Double.self) { Text(verbatim: formatBytes(Int64(bytes))) }
+                        }
+                    }
+                }
+                .frame(height: 130)
+            }
+            if let latest = history.latest {
+                Text("Now: \(formatBytes(latest.used)) used, \(formatBytes(latest.total - latest.used)) available")
+                    .font(.callout)
+            }
+            if let since {
+                Text("Recorded since \(since), on this Mac only.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    /// "+12.3 GB" or "−4.1 GB".
+    private func signedBytes(_ bytes: Int64) -> String {
+        (bytes < 0 ? "−" : "+") + formatBytes(abs(bytes))
     }
 
     // Numbers and units follow the language chosen in Sweeply, not only the system's.

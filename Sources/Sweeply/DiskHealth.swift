@@ -140,23 +140,33 @@ final class DiskHealthModel {
 
     private(set) var state: State = .notLoaded
     private(set) var history: DiskWriteHistory
+    /// The startup disk's used space, noted at the same moments as the writes.
+    private(set) var space: DiskSpaceHistory
     private let historyURL: URL
+    private let spaceURL: URL
     /// False for made-up snapshot data: never read the real disk or save history.
     private let live: Bool
     private var timer: Timer?
 
-    init(state: State = .notLoaded, history: DiskWriteHistory? = nil,
-         historyURL: URL = DiskWriteHistory.defaultURL, live: Bool = true) {
+    init(state: State = .notLoaded, history: DiskWriteHistory? = nil, space: DiskSpaceHistory? = nil,
+         historyURL: URL = DiskWriteHistory.defaultURL, spaceURL: URL = DiskSpaceHistory.defaultURL, live: Bool = true) {
         self.state = state
         self.historyURL = historyURL
+        self.spaceURL = spaceURL
         self.live = live
         self.history = history ?? (live ? DiskWriteHistory.load(from: historyURL) : DiskWriteHistory())
+        self.space = space ?? (live ? DiskSpaceHistory.load(from: spaceURL) : DiskSpaceHistory())
     }
 
     /// A read takes a few milliseconds, so it simply runs here on the main actor.
     /// Every successful read also notes the lifetime total for the writes-per-day chart.
+    /// The used space is noted every time, even when the drive's health can't be read.
     func refresh() {
         guard live else { return }
+        if let storage = SystemStats.storage() {
+            space.record(used: storage.total - storage.available, total: storage.total)
+            space.save(to: spaceURL)
+        }
         let health = DiskHealth.readBuiltInDisk()
         state = health.map(State.loaded) ?? .unavailable
         if let health {

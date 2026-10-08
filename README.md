@@ -12,7 +12,7 @@ anything until you choose to.
   <img src="docs/screenshots/main-en-light.png" width="720" alt="Sweeply showing developer caches and their sizes">
 </p>
 
-> **Status: early preview (0.7).** Cleans up, removes what deleted apps left behind, gives your Mac a quick checkup, controls display brightness, and can stay in the menu bar.
+> **Status: early preview (0.8).** Cleans up, removes what deleted apps left behind, gives your Mac a quick checkup, controls display brightness, and can stay in the menu bar.
 
 ## What it finds
 
@@ -53,6 +53,8 @@ anything until you choose to.
 - How much has been written to your Mac's built-in SSD, how worn the drive thinks it
   is, its temperature, spare blocks and error counts — read straight from the drive.
 - Writes per day over the last 30 days (Sweeply notes the total whenever it's open).
+- Used space over the last 30 days and how much it changed, to spot something that keeps
+  eating space. History is kept on this Mac only, across updates.
 
 <p align="center">
   <img src="docs/screenshots/disk-en-light.png" width="620" alt="Sweeply's Disk Health tab">

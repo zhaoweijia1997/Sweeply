@@ -18,13 +18,14 @@ enum Snapshots {
             let pages: [(String, ScanModel, ContentView.Tab)] = [
                 ("main", .sample, .clean), ("cleaned", .sampleAfterCleanup, .clean), ("system", .sample, .system),
                 ("disk", .sample, .disk), ("devices", .sample, .devices), ("items", .sample, .clean),
+                ("disk-full", .sample, .disk),
             ]
             for (name, model, tab) in pages {
-            // The expanded list is long; render it tall enough to show every category.
-            let height: CGFloat = name == "items" ? 2600 : size.height
+            // The expanded list and the whole Disk Health tab are long; render them tall enough.
+            let height: CGFloat = name == "items" ? 2600 : name == "disk-full" ? 1240 : size.height
             for dark in [false, true] {
                 let view = ContentView(
-                    model: model, system: .sample, disk: DiskHealthModel(state: .loaded(.sample), history: .sample, live: false),
+                    model: model, system: .sample, disk: DiskHealthModel(state: .loaded(.sample), history: .sample, space: .sample, live: false),
                     devices: PeripheralsModel(peripherals: .sample, live: false), brightness: .sample, tab: tab)
                     .environment(\.expandAllItems, name == "items")
                     .environment(\.locale, language.locale)
@@ -53,7 +54,7 @@ enum Snapshots {
                     try? png.write(to: folder.appending(path: "settings-" + suffix))
                 }
                 let panel = MenuBarPanel(
-                    system: .sample, disk: DiskHealthModel(state: .loaded(.sample), history: .sample, live: false),
+                    system: .sample, disk: DiskHealthModel(state: .loaded(.sample), history: .sample, space: .sample, live: false),
                     brightness: .sample)
                     .environment(\.locale, language.locale)
                     .background(Color(nsColor: .windowBackgroundColor))
@@ -231,5 +232,20 @@ extension ScanModel {
             FoundItem(url: URL(fileURLWithPath: "/Library/Audio/Plug-Ins/HAL/ExampleRemoteSound.driver"), size: 1_200_000, label: "ExampleRemoteSound",
                       leftover: Leftover(kind: .audioDriver, identifier: "com.example.ExampleRemoteSound", appName: "Example Remote", needsPassword: true)),
         ])
+    }
+}
+
+extension DiskSpaceHistory {
+    /// Made-up month on a 1 TB disk: slowly filling up, with one cleanup along the way.
+    static var sample: DiskSpaceHistory {
+        var history = DiskSpaceHistory()
+        let start = Calendar.current.startOfDay(for: Date()).addingTimeInterval(-29 * 86_400 + 20 * 3600)
+        var used: Int64 = 236_000_000_000
+        for day in 0..<30 {
+            used += Int64(900_000_000 + ((day * 37) % 11 - 5) * 200_000_000)
+            if day == 19 { used -= 12_000_000_000 }
+            history.record(used: used, total: 1_000_000_000_000, at: start.addingTimeInterval(Double(day) * 86_400))
+        }
+        return history
     }
 }

@@ -169,3 +169,8 @@
 "Background items removed: %lld" = "削除したバックグラウンド項目：%lld 件";
 "Removed audio drivers are fully gone after you restart the Mac." = "削除したオーディオドライバは Mac を再起動すると完全になくなります。";
 "Items in system folders were left alone because the password wasn't entered." = "パスワードが入力されなかったため、システムフォルダ内の項目はそのままです。";
+"Used space" = "使用済み容量";
+"Used" = "使用済み";
+"Change: %@" = "増減：%@";
+"Sweeply notes the used space whenever it's open. Check back tomorrow to see how it changes." = "Sweeply は開いているときに使用済み容量を記録します。明日また見ると変化がわかります。";
+"Now: %@ used, %@ available" = "現在：使用済み %@、空き %@";

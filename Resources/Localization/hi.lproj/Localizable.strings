@@ -169,3 +169,8 @@
 "Background items removed: %lld" = "हटाए गए बैकग्राउंड आइटम: %lld";
 "Removed audio drivers are fully gone after you restart the Mac." = "हटाए गए ऑडियो ड्राइवर Mac को रीस्टार्ट करने के बाद पूरी तरह चले जाते हैं।";
 "Items in system folders were left alone because the password wasn't entered." = "पासवर्ड नहीं डाला गया, इसलिए सिस्टम फ़ोल्डरों के आइटम नहीं छेड़े गए।";
+"Used space" = "इस्तेमाल हुई जगह";
+"Used" = "इस्तेमाल";
+"Change: %@" = "बदलाव: %@";
+"Sweeply notes the used space whenever it's open. Check back tomorrow to see how it changes." = "Sweeply खुला होने पर हर बार इस्तेमाल हुई जगह नोट करता है। यह कैसे बदलती है, देखने के लिए कल फिर देखें।";
+"Now: %@ used, %@ available" = "अभी: %@ इस्तेमाल, %@ उपलब्ध";

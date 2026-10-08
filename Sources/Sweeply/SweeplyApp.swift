@@ -53,6 +53,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                     } else {
                         print("Read \(attempt): Disk health unavailable")
                     }
+                    if let latest = model.space.latest {
+                        print("  Used space: \(latest.used) of \(latest.total) bytes; \(model.space.samples.count) samples, \(model.space.days(30).count) days")
+                    }
                 }
             }
             exit(0)

@@ -172,3 +172,8 @@
 "Background items removed: %lld" = "Background items removed: %lld";
 "Removed audio drivers are fully gone after you restart the Mac." = "Removed audio drivers are fully gone after you restart the Mac.";
 "Items in system folders were left alone because the password wasn't entered." = "Items in system folders were left alone because the password wasn't entered.";
+"Used space" = "Used space";
+"Used" = "Used";
+"Change: %@" = "Change: %@";
+"Sweeply notes the used space whenever it's open. Check back tomorrow to see how it changes." = "Sweeply notes the used space whenever it's open. Check back tomorrow to see how it changes.";
+"Now: %@ used, %@ available" = "Now: %@ used, %@ available";
