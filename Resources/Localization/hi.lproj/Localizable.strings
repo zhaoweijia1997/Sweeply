@@ -174,3 +174,10 @@
 "Change: %@" = "बदलाव: %@";
 "Sweeply notes the used space whenever it's open. Check back tomorrow to see how it changes." = "Sweeply खुला होने पर हर बार इस्तेमाल हुई जगह नोट करता है। यह कैसे बदलती है, देखने के लिए कल फिर देखें।";
 "Now: %@ used, %@ available" = "अभी: %@ इस्तेमाल, %@ उपलब्ध";
+
+/* Volume (0.9) */
+"Volume" = "वॉल्यूम";
+"Mute" = "म्यूट करें";
+"Unmute" = "अनम्यूट करें";
+"Sound output" = "साउंड आउटपुट";
+"The Mac can't set this output's volume." = "इस आउटपुट का वॉल्यूम Mac से नहीं बदला जा सकता।";

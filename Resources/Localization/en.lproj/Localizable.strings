@@ -177,3 +177,10 @@
 "Change: %@" = "Change: %@";
 "Sweeply notes the used space whenever it's open. Check back tomorrow to see how it changes." = "Sweeply notes the used space whenever it's open. Check back tomorrow to see how it changes.";
 "Now: %@ used, %@ available" = "Now: %@ used, %@ available";
+
+/* Volume (0.9) */
+"Volume" = "Volume";
+"Mute" = "Mute";
+"Unmute" = "Unmute";
+"Sound output" = "Sound output";
+"The Mac can't set this output's volume." = "The Mac can't set this output's volume.";

@@ -26,7 +26,7 @@ enum Snapshots {
             for dark in [false, true] {
                 let view = ContentView(
                     model: model, system: .sample, disk: DiskHealthModel(state: .loaded(.sample), history: .sample, space: .sample, live: false),
-                    devices: PeripheralsModel(peripherals: .sample, live: false), brightness: .sample, tab: tab)
+                    devices: PeripheralsModel(peripherals: .sample, live: false), brightness: .sample, volume: .sample, tab: tab)
                     .environment(\.expandAllItems, name == "items")
                     .environment(\.locale, language.locale)
                     .frame(width: size.width, height: height)
@@ -55,7 +55,7 @@ enum Snapshots {
                 }
                 let panel = MenuBarPanel(
                     system: .sample, disk: DiskHealthModel(state: .loaded(.sample), history: .sample, space: .sample, live: false),
-                    brightness: .sample)
+                    brightness: .sample, volume: .sample)
                     .environment(\.locale, language.locale)
                     .background(Color(nsColor: .windowBackgroundColor))
                 if let png = draw(panel, dark: dark, height: nil) {
@@ -104,7 +104,14 @@ enum Snapshots {
 extension BrightnessModel {
     /// Made-up display brightness for screenshots (id 1 matches Peripherals.sample's display).
     static var sample: BrightnessModel {
-        BrightnessModel(displays: [Display(id: 1, name: "External Display", value: 0.72, supported: true)], live: false)
+        BrightnessModel(displays: [Display(id: 1, name: "External Display", value: 0.72, supported: true, volume: 0.31)], live: false)
+    }
+}
+
+extension VolumeModel {
+    /// A made-up sound output for screenshots.
+    static var sample: VolumeModel {
+        VolumeModel(output: Output(name: "Speakers", volume: 0.45, muted: false, canSetVolume: true, canMute: true), live: false)
     }
 }
 

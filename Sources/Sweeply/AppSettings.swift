@@ -40,7 +40,14 @@ enum LoginItem {
         if enabled {
             do {
                 try SMAppService.mainApp.register()
+                removeAgent(agentURL)
             } catch {
+                // Already registered: nothing more to do. A launch agent as well would start
+                // a second Sweeply at login.
+                if [.enabled, .requiresApproval].contains(SMAppService.mainApp.status) {
+                    removeAgent(agentURL)
+                    return
+                }
                 try FileManager.default.createDirectory(at: agentURL.deletingLastPathComponent(), withIntermediateDirectories: true)
                 try PropertyListSerialization.data(fromPropertyList: agentPlist(appPath: appPath), format: .xml, options: 0)
                     .write(to: agentURL, options: .atomic)
@@ -53,6 +60,16 @@ enum LoginItem {
                 try FileManager.default.removeItem(at: agentURL)
             }
         }
+    }
+
+    /// One way of starting at login only: once the system's login item is on, a launch agent
+    /// left from an earlier fallback is removed (with both, two copies started at login).
+    static func tidyUp() {
+        if SMAppService.mainApp.status == .enabled { removeAgent(agentURL) }
+    }
+
+    private static func removeAgent(_ url: URL) {
+        if FileManager.default.fileExists(atPath: url.path) { try? FileManager.default.removeItem(at: url) }
     }
 
     static var agentURL: URL {
@@ -91,6 +108,7 @@ final class AppModels {
     let devices = PeripheralsModel()
     let menuBar = MenuBarModel()
     let brightness = BrightnessModel()
+    let volume = VolumeModel()
 }
 
 /// Shows or hides the Dock icon: in background mode Sweeply lives in the menu bar
@@ -103,5 +121,65 @@ enum DockIcon {
 
     static func windowClosed() {
         if AppSettings.backgroundMode { NSApp.setActivationPolicy(.accessory) }
+    }
+}
+
+/// One Sweeply at a time. macOS starts a login item by its identifier and may pick any copy,
+/// a build folder's included, and opening a second copy by hand starts a second process; each
+/// would add its own menu bar icon.
+enum SingleInstance {
+    /// True when this process quits in favor of another copy.
+    @MainActor
+    static func handOver() -> Bool {
+        guard let identifier = Bundle.main.bundleIdentifier else { return false }
+        let me = NSRunningApplication.current
+        let others = NSRunningApplication.runningApplications(withBundleIdentifier: identifier).filter { $0 != me }
+        if !others.isEmpty {
+            // The installed copy wins over stray ones from elsewhere.
+            if isInstalled(Bundle.main.bundleURL), !others.contains(where: { $0.bundleURL.map(isInstalled) ?? false }) {
+                others.forEach { $0.terminate() }
+                return false
+            }
+            // Opened by hand: show the window of the one already running.
+            if !LoginItem.launchedAtLogin, let other = others.first { reopen(other) }
+            quitSoon()
+            return true
+        }
+        // Started at login from a copy outside Applications: start the installed copy instead.
+        if LoginItem.launchedAtLogin, !isInstalled(Bundle.main.bundleURL), let installed = installedCopy(identifier) {
+            let configuration = NSWorkspace.OpenConfiguration()
+            configuration.arguments = ["--login"]
+            configuration.activates = false
+            // Otherwise Launch Services finds this process (same identifier) and starts nothing.
+            configuration.createsNewApplicationInstance = true
+            NSWorkspace.shared.openApplication(at: installed, configuration: configuration) { _, _ in quitSoon() }
+            return true
+        }
+        return false
+    }
+
+    static func isInstalled(_ url: URL) -> Bool {
+        let path = url.standardizedFileURL.path
+        let home = FileManager.default.homeDirectoryForCurrentUser.path
+        return path.hasPrefix("/Applications/") || path.hasPrefix(home + "/Applications/")
+    }
+
+    private static func installedCopy(_ identifier: String) -> URL? {
+        let home = FileManager.default.homeDirectoryForCurrentUser.path
+        let name = Bundle.main.bundleURL.lastPathComponent
+        return ["/Applications", home + "/Applications"]
+            .map { URL(fileURLWithPath: $0).appending(path: name) }
+            .first { Bundle(url: $0)?.bundleIdentifier == identifier }
+    }
+
+    /// What opening it from the Finder does: Launch Services finds the copy running at that
+    /// path and shows its window (a reopen event alone doesn't bring a menu bar app forward).
+    private static func reopen(_ app: NSRunningApplication) {
+        guard let url = app.bundleURL else { return }
+        NSWorkspace.shared.openApplication(at: url, configuration: NSWorkspace.OpenConfiguration())
+    }
+
+    private static func quitSoon() {
+        DispatchQueue.main.async { exit(0) }
     }
 }

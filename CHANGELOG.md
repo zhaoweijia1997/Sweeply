@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.9.0 — 2026-10-09
+
+- **Volume**: a slider for the Mac's current sound output (speakers, headphones, a USB or
+  Bluetooth device) next to brightness, on the Devices tab and in the menu bar panel. It
+  follows the volume keys and a change of output; click the speaker to mute, and turning it
+  up unmutes, like the keys. Outputs whose volume the Mac can't set get a note instead.
+- **Monitor speakers**: monitors that take DDC commands (most third-party ones, the same as
+  for brightness) also get a slider for their own speakers or headphone jack — VCP code 0x62,
+  as MonitorControl uses. Muting turns it down to 0 and back; the DDC mute command isn't sent,
+  since some monitors blank the screen on it.
+- **Fixed: the menu bar icon could stay hidden.** Command-line runs (`--report`,
+  `--snapshot`, `--disk-health`, `--leftovers`) created the menu bar item before quitting,
+  and macOS remembered it as hidden in the user's own settings. They now run before the app
+  starts. If the broom is still missing after updating, allow Sweeply in System Settings →
+  Menu Bar (macOS 26 and later) and reopen it.
+- **One Sweeply at a time.** macOS could start two at login — it picks any copy of the app with
+  the same identifier, a build folder's included, and a launch agent left from an earlier
+  fallback started another. A second copy now hands over to the one already running (or, at
+  login, to the copy in Applications) and quits, and once the system's login item is on, that
+  launch agent is removed.
+- `./build.sh --dmg` keeps only the newest dmg in `build.noindex`.
+
 ## 0.8.0 — 2026-10-08
 
 - **Used space over time** on the Disk Health tab: how much of the startup disk was in use at

@@ -41,7 +41,8 @@ case "${1:-}" in
   VERSION="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' Resources/Info.plist)"
   STAGE=build.noindex/dmg
   DMG="build.noindex/Sweeply-$VERSION.dmg"
-  rm -rf "$STAGE" "$DMG"
+  # Only the newest dmg is kept; older ones are on the GitHub releases.
+  rm -rf "$STAGE" build.noindex/Sweeply-*.dmg(N)
   mkdir -p "$STAGE"
   ditto "$APP" "$STAGE/Sweeply.app"
   ln -s /Applications "$STAGE/Applications"

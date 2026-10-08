@@ -174,3 +174,10 @@
 "Change: %@" = "變化：%@";
 "Sweeply notes the used space whenever it's open. Check back tomorrow to see how it changes." = "Sweeply 每次開啟時都會記下已使用空間。明天再來看它的變化。";
 "Now: %@ used, %@ available" = "目前：已使用 %@，可用 %@";
+
+/* Volume (0.9) */
+"Volume" = "音量";
+"Mute" = "靜音";
+"Unmute" = "取消靜音";
+"Sound output" = "聲音輸出";
+"The Mac can't set this output's volume." = "這個輸出裝置的音量無法由 Mac 調整。";

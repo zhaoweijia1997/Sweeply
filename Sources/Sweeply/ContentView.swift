@@ -11,6 +11,7 @@ struct ContentView: View {
     let disk: DiskHealthModel
     let devices: PeripheralsModel
     let brightness: BrightnessModel
+    let volume: VolumeModel
 
     @AppStorage(AppLanguage.storageKey) private var language: AppLanguage = .system
     @State private var tab: Tab
@@ -18,12 +19,13 @@ struct ContentView: View {
     @State private var confirmingClean = false
 
     init(model: ScanModel, system: SystemModel, disk: DiskHealthModel, devices: PeripheralsModel,
-         brightness: BrightnessModel, tab: Tab = .clean) {
+         brightness: BrightnessModel, volume: VolumeModel, tab: Tab = .clean) {
         self.model = model
         self.system = system
         self.disk = disk
         self.devices = devices
         self.brightness = brightness
+        self.volume = volume
         _tab = State(initialValue: tab)
     }
 
@@ -65,7 +67,7 @@ struct ContentView: View {
             case .disk:
                 DiskHealthView(model: disk)
             case .devices:
-                DevicesView(model: devices, brightness: brightness)
+                DevicesView(model: devices, brightness: brightness, volume: volume)
             }
         }
         .sheet(isPresented: $showingAbout) { AboutView() }

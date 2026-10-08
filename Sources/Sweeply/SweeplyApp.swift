@@ -2,20 +2,32 @@ import AppKit
 import ServiceManagement
 import SwiftUI
 
+/// Command-line runs are handled before SwiftUI starts: creating the menu bar item, even one
+/// that's never shown, makes macOS store "this icon is hidden" in the user's preferences, and the
+/// broom then stays out of the menu bar.
 @main
+enum Main {
+    static func main() {
+        let flags = ["--snapshot", "--report", "--disk-health", "--leftovers"]
+        if flags.contains(where: CommandLine.arguments.contains) {
+            _ = NSApplication.shared
+            MainActor.assumeIsolated { CommandLineTool.run() }
+            exit(0)
+        }
+        SweeplyApp.main()
+    }
+}
+
 struct SweeplyApp: App {
     @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
     @AppStorage(AppLanguage.storageKey) private var language: AppLanguage = .system
     @AppStorage(AppSettings.backgroundModeKey) private var backgroundMode = false
     private let models = AppModels.shared
-    /// --snapshot, --report, --disk-health and --leftovers runs mustn't create a menu bar item:
-    /// it would write its state back into the user's real preferences.
-    private let commandLineRun = ["--snapshot", "--report", "--disk-health", "--leftovers"].contains { CommandLine.arguments.contains($0) }
 
     var body: some Scene {
         Window("Sweeply", id: "main") {
             ContentView(model: models.scan, system: models.system, disk: models.disk, devices: models.devices,
-                        brightness: models.brightness)
+                        brightness: models.brightness, volume: models.volume)
                 .environment(\.locale, language.locale)
                 .frame(minWidth: 680, minHeight: 540)
                 .onAppear { DockIcon.windowOpened() }
@@ -29,8 +41,8 @@ struct SweeplyApp: App {
         }
 
         // Only while "Run in the background with a menu bar icon" is on.
-        MenuBarExtra(isInserted: commandLineRun ? .constant(false) : $backgroundMode) {
-            MenuBarPanel(system: models.system, disk: models.disk, brightness: models.brightness)
+        MenuBarExtra(isInserted: $backgroundMode) {
+            MenuBarPanel(system: models.system, disk: models.disk, brightness: models.brightness, volume: models.volume)
                 .environment(\.locale, language.locale)
         } label: {
             MenuBarLabel(model: models.menuBar)
@@ -41,6 +53,40 @@ struct SweeplyApp: App {
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
+        if MainActor.assumeIsolated({ SingleInstance.handOver() }) { return }
+        LoginItem.tidyUp()
+        MainActor.assumeIsolated {
+            // Hourly writes-per-day recording and the menu bar number run for the app's
+            // lifetime, window or not.
+            AppModels.shared.disk.startRecording()
+            AppModels.shared.menuBar.start()
+        }
+        if LoginItem.launchedAtLogin && AppSettings.backgroundMode {
+            // Opened at login: stay quietly in the menu bar.
+            DispatchQueue.main.async {
+                NSApp.windows.filter(\.canBecomeMain).forEach { $0.close() }
+                NSApp.setActivationPolicy(.accessory)
+            }
+        } else {
+            // Behave like a normal windowed app when started with `swift run`, too.
+            NSApp.setActivationPolicy(.regular)
+            NSApp.activate(ignoringOtherApps: true)
+        }
+    }
+
+    /// In background mode, closing the window keeps Sweeply in the menu bar.
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        !AppSettings.backgroundMode
+    }
+
+    /// Opening Sweeply again (Launchpad, Finder) while it runs in the background shows the window.
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool { true }
+}
+
+/// `--disk-health`, `--report`, `--leftovers` and `--snapshot`: print or render, then quit.
+@MainActor
+enum CommandLineTool {
+    static func run() {
         // Sweeply.app/Contents/MacOS/Sweeply --disk-health: print what Disk Health reads, for bug reports.
         // Reads twice through the same path as the tab, like opening it and pressing Refresh.
         if CommandLine.arguments.contains("--disk-health") {
@@ -105,30 +151,5 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             MainActor.assumeIsolated { Snapshots.render(to: URL(fileURLWithPath: folder)) }
             exit(0)
         }
-        MainActor.assumeIsolated {
-            // Hourly writes-per-day recording and the menu bar number run for the app's
-            // lifetime, window or not.
-            AppModels.shared.disk.startRecording()
-            AppModels.shared.menuBar.start()
-        }
-        if LoginItem.launchedAtLogin && AppSettings.backgroundMode {
-            // Opened at login: stay quietly in the menu bar.
-            DispatchQueue.main.async {
-                NSApp.windows.filter(\.canBecomeMain).forEach { $0.close() }
-                NSApp.setActivationPolicy(.accessory)
-            }
-        } else {
-            // Behave like a normal windowed app when started with `swift run`, too.
-            NSApp.setActivationPolicy(.regular)
-            NSApp.activate(ignoringOtherApps: true)
-        }
     }
-
-    /// In background mode, closing the window keeps Sweeply in the menu bar.
-    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
-        !AppSettings.backgroundMode
-    }
-
-    /// Opening Sweeply again (Launchpad, Finder) while it runs in the background shows the window.
-    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool { true }
 }

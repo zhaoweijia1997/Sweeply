@@ -174,3 +174,10 @@
 "Change: %@" = "増減：%@";
 "Sweeply notes the used space whenever it's open. Check back tomorrow to see how it changes." = "Sweeply は開いているときに使用済み容量を記録します。明日また見ると変化がわかります。";
 "Now: %@ used, %@ available" = "現在：使用済み %@、空き %@";
+
+/* Volume (0.9) */
+"Volume" = "音量";
+"Mute" = "消音";
+"Unmute" = "消音を解除";
+"Sound output" = "サウンド出力";
+"The Mac can't set this output's volume." = "この出力の音量は Mac から変更できません。";

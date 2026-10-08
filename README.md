@@ -12,7 +12,7 @@ anything until you choose to.
   <img src="docs/screenshots/main-en-light.png" width="720" alt="Sweeply showing developer caches and their sizes">
 </p>
 
-> **Status: early preview (0.8).** Cleans up, removes what deleted apps left behind, gives your Mac a quick checkup, controls display brightness, and can stay in the menu bar.
+> **Status: early preview (0.9).** Cleans up, removes what deleted apps left behind, gives your Mac a quick checkup, controls display brightness and the volume, and can stay in the menu bar.
 
 ## What it finds
 
@@ -63,10 +63,14 @@ anything until you choose to.
 **Devices**
 - Displays, external drives, USB and Thunderbolt devices — names, sizes and speeds only.
 - A brightness slider for each display (Apple displays, and most other monitors over DDC).
+- A volume slider for the current sound output; it follows the volume keys, and the speaker
+  icon mutes. Monitors that allow it over DDC get a slider for their own speakers too (the
+  way [MonitorControl](https://github.com/MonitorControl/MonitorControl) does it).
 
 **Menu bar** (optional, in Settings)
 - Keep Sweeply running as a little broom in the menu bar, optionally with the CPU
-  temperature or usage next to it, and open it at login.
+  temperature or usage next to it, and open it at login. Its panel has the main readings and
+  the brightness and volume sliders.
 
 Each category explains what it is and whether it comes back. Expand it to see every
 folder, reveal it in Finder, or untick the ones you want to keep.

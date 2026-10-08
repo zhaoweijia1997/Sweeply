@@ -3,6 +3,7 @@ import SwiftUI
 struct DevicesView: View {
     let model: PeripheralsModel
     let brightness: BrightnessModel
+    let volume: VolumeModel
 
     var body: some View {
         ScrollView {
@@ -16,7 +17,7 @@ struct DevicesView: View {
                                     info: "\(display.pixelWidth) × \(display.pixelHeight) · \(display.refreshRate) Hz",
                                     badge: display.isBuiltIn ? "Built-in" : nil)
                                 if let control = brightness.display(display.id) {
-                                    Group {
+                                    VStack(alignment: .leading, spacing: 8) {
                                         if control.supported {
                                             BrightnessSlider(model: brightness, display: control)
                                         } else {
@@ -24,10 +25,32 @@ struct DevicesView: View {
                                                 .font(.caption)
                                                 .foregroundStyle(.secondary)
                                         }
+                                        // The monitor's own speakers or headphone jack, over DDC.
+                                        if control.volume != nil {
+                                            MonitorVolumeSlider(model: brightness, display: control)
+                                        }
                                     }
                                     .padding(.horizontal, 12)
                                     .padding(.bottom, 12)
                                 }
+                            }
+                        }
+                    }
+                    section("Sound output", systemImage: "speaker.wave.2", isEmpty: volume.output == nil) {
+                        if let output = volume.output {
+                            VStack(alignment: .leading, spacing: 0) {
+                                DeviceRow(name: output.name.isEmpty ? String(localized: "Sound output") : output.name, info: "")
+                                Group {
+                                    if output.canSetVolume {
+                                        VolumeSlider(model: volume, output: output)
+                                    } else {
+                                        Text("The Mac can't set this output's volume.")
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                }
+                                .padding(.horizontal, 12)
+                                .padding(.bottom, 12)
                             }
                         }
                     }
@@ -60,6 +83,7 @@ struct DevicesView: View {
         .onAppear {
             model.start()
             brightness.refresh()
+            volume.start()
         }
         .onDisappear { model.stop() }
     }

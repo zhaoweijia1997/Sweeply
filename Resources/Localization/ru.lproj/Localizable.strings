@@ -174,3 +174,10 @@
 "Change: %@" = "Изменение: %@";
 "Sweeply notes the used space whenever it's open. Check back tomorrow to see how it changes." = "Sweeply записывает занятое место, когда открыт. Загляните завтра, чтобы увидеть, как оно меняется.";
 "Now: %@ used, %@ available" = "Сейчас: занято %@, доступно %@";
+
+/* Volume (0.9) */
+"Volume" = "Громкость";
+"Mute" = "Выключить звук";
+"Unmute" = "Включить звук";
+"Sound output" = "Вывод звука";
+"The Mac can't set this output's volume." = "Mac не может менять громкость этого устройства.";

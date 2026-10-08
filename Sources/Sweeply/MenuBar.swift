@@ -111,6 +111,7 @@ struct MenuBarPanel: View {
     let system: SystemModel
     let disk: DiskHealthModel
     let brightness: BrightnessModel
+    let volume: VolumeModel
 
     @Environment(\.openWindow) private var openWindow
     @Environment(\.locale) private var locale
@@ -144,15 +145,32 @@ struct MenuBarPanel: View {
             }
             .font(.callout)
             let controllable = brightness.displays.filter(\.supported)
-            if !controllable.isEmpty {
+            let sound = volume.output.flatMap { $0.canSetVolume ? $0 : nil }
+            let monitorSpeakers = brightness.displays.filter { $0.volume != nil }
+            if !controllable.isEmpty || sound != nil || !monitorSpeakers.isEmpty {
                 Divider()
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Brightness").font(.callout).foregroundStyle(.secondary)
-                    ForEach(controllable) { display in
-                        if controllable.count > 1 {
-                            Text(verbatim: display.name).font(.caption)
+                    if !controllable.isEmpty {
+                        Text("Brightness").font(.callout).foregroundStyle(.secondary)
+                        ForEach(controllable) { display in
+                            if controllable.count > 1 {
+                                Text(verbatim: display.name).font(.caption)
+                            }
+                            BrightnessSlider(model: brightness, display: display)
                         }
-                        BrightnessSlider(model: brightness, display: display)
+                    }
+                    if sound != nil || !monitorSpeakers.isEmpty {
+                        Text("Volume").font(.callout).foregroundStyle(.secondary)
+                            .padding(.top, controllable.isEmpty ? 0 : 4)
+                    }
+                    // The Mac's sound output, then each monitor's own speakers (over DDC).
+                    if let sound {
+                        Text(verbatim: sound.name).font(.caption).lineLimit(1)
+                        VolumeSlider(model: volume, output: sound)
+                    }
+                    ForEach(monitorSpeakers) { display in
+                        Text(verbatim: display.name).font(.caption).lineLimit(1)
+                        MonitorVolumeSlider(model: brightness, display: display)
                     }
                 }
             }
@@ -179,6 +197,7 @@ struct MenuBarPanel: View {
         .onAppear {
             system.start()
             brightness.refresh()
+            volume.start()
         }
         .onDisappear { system.stop() }
     }
