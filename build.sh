@@ -18,6 +18,8 @@ APP=build.noindex/Sweeply.app
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN" "$APP/Contents/MacOS/Sweeply"
+# Debug symbols carry the build folder's full path (user name included); the app doesn't need them.
+strip -S "$APP/Contents/MacOS/Sweeply"
 cp Resources/Info.plist "$APP/Contents/Info.plist"
 cp -R Resources/Localization/*.lproj "$APP/Contents/Resources/"
 [[ -f Resources/AppIcon.icns ]] && cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
